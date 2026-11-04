@@ -1,0 +1,95 @@
+{
+  "format": "data365-project",
+  "version": 1,
+  "projectId": "p_lmyys54pi6h4",
+  "name": "Hamkor viza",
+  "slug": "hamkor-viza",
+  "project": {
+    "created_at": "2026-11-03T13:57:41Z",
+    "data": {
+      "id": "p_lmyys54pi6h4",
+      "name": "Hamkor viza",
+      "industry": "retail",
+      "step": "build",
+      "stepsDone": [
+        "name",
+        "sources",
+        "structure",
+        "load",
+        "look",
+        "pages",
+        "analysis",
+        "questions",
+        "build"
+      ],
+      "stale": [],
+      "visited": [
+        "name",
+        "sources",
+        "structure",
+        "load",
+        "look",
+        "pages",
+        "analysis",
+        "questions",
+        "build"
+      ],
+      "ui": "glass",
+      "mode": "standard",
+      "pages": [
+        "lead",
+        "calls",
+        "hisobot",
+        "taqsimot"
+      ],
+      "loadMode": "api",
+      "loadSpeed": "gentle",
+      "loadReport": null,
+      "loadReports": {},
+      "loadSections": [],
+      "status": "ready",
+      "createdAt": "2026-11-03T13:57:41Z"
+    },
+    "id": "p_lmyys54pi6h4",
+    "name": "Hamkor viza"
+  },
+  "live": {
+    "built_at": "2026-11-03T14:06:01Z",
+    "project_id": "p_lmyys54pi6h4",
+    "slug": "hamkor-viza"
+  },
+  "connections": [
+    {
+      "created_at": "2026-11-03T13:58:39Z",
+      "data": {
+        "id": "c_tdo3gsmsll6x",
+        "source": "bitrix24",
+        "label": "wayforeuway.bitrix24.kz",
+        "isDemo": false,
+        "connectedAt": "2026-11-03T13:58:37Z",
+        "details": {
+          "portal": "wayforeuway.bitrix24.kz",
+          "isCloud": true,
+          "creator": "Data365 Support",
+          "isAdmin": true,
+          "plan": "—",
+          "scopes": [
+            "crm",
+            "department",
+            "task",
+            "tasks",
+            "telephony",
+            "timeman",
+            "user"
+          ]
+        }
+      },
+      "external_key": "bitrix24:wayforeuway.bitrix24.kz",
+      "id": "c_tdo3gsmsll6x",
+      "is_demo": 0,
+      "project_id": "p_lmyys54pi6h4",
+      "secret": "re-enter after restore",
+      "source": "bitrix24"
+    }
+  ]
+}
