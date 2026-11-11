@@ -1,0 +1,31 @@
+import type { Dict } from '@/i18n'
+
+/** «VS Code'da ochish», «Kompyuterdagi papka», «VS Code'da davom ettirish» and «GitHub'dagini joylash» (features/edit/VsCode.tsx). */
+export default {
+  "VS Code'da ochish": ['Открыть в VS Code', 'Open in VS Code'],
+  'Brauzerda (vscode.dev)': ['В браузере (vscode.dev)', 'In the browser (vscode.dev)'],
+  'Kompyuterdagi VS Code': ['VS Code на компьютере', 'VS Code on this computer'],
+  "GitHub'da ko'rish": ['Открыть на GitHub', 'View on GitHub'],
+  "GitHub'dagini joylash": ['Выложить то, что на GitHub', 'Deploy what is on GitHub'],
+  "GitHub'dagini joylaysizmi?": ['Выложить то, что на GitHub?', 'Deploy what is on GitHub?'],
+  "GitHub'dagi oxirgi holat olinmoqda": ['Берём последнее состояние с GitHub', "Taking GitHub's latest state"],
+  'GitHub tekshirilmoqda…': ['Проверяем GitHub…', 'Checking GitHub…'],
+  "GitHub'ni tekshirib bo'lmadi": ['Не удалось проверить GitHub', 'Could not check GitHub'],
+  "Saytda GitHub'dagi oxirgi holat bor": ['На сайте уже последнее состояние с GitHub', "The site already runs GitHub's latest"],
+  "GitHub'da saytda yo'q {n} ta o'zgarish": ['На GitHub изменений, которых нет на сайте: {n}', '{n} changes on GitHub not on the site'],
+  "GitHub'dagi oxirgi o'zgarishlar": ['Последние изменения на GitHub', 'Latest changes on GitHub'],
+  'Yangi nusxa olish (clone)': ['Новая копия (clone)', 'New copy (clone)'],
+  'Kompyuterdagi papka': ['Папка на компьютере', 'Folder on this computer'],
+  "To'liq yo'l kerak": ['Нужен полный путь', 'A full path is needed'],
+  "VS Code'da davom ettirish": ['Продолжить в VS Code', 'Continue in VS Code'],
+  "VS Code'da davom etmoqda": ['Продолжается в VS Code', 'Continuing in VS Code'],
+  'Matn nusxalandi': ['Текст скопирован', 'Text copied'],
+  '.md yuklab olish': ['Скачать .md', 'Download .md'],
+  "GitHub'ga yuborilmadi": ['Не отправлено на GitHub', 'Not sent to GitHub'],
+  Nusxalash: ['Копировать', 'Copy'],
+  "Nusxa tozalangan — branch GitHub'ga yuborilmadi, faqat matn": ['Копия удалена — ветка не отправлена на GitHub, только текст', 'The copy was cleaned up — the branch was not sent to GitHub, text only'],
+  "Suhbatning o'z branchi yo'q — faqat matn": ['У чата нет своей ветки — только текст', 'This chat has no branch of its own — text only'],
+  'Suhbatning branchi nusxada topilmadi — faqat matn': ['Ветка чата не найдена в копии — только текст', "The chat's branch is not in the copy — text only"],
+  'GitHub branchni qabul qilmadi': ['GitHub не принял ветку', 'GitHub did not accept the branch'],
+  'Nova hali ishlayapti — tugashini kuting': ['Nova ещё работает — дождитесь окончания', 'Nova is still working — wait until it finishes'],
+} satisfies Dict

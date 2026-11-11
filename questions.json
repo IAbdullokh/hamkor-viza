@@ -1,0 +1,1527 @@
+[
+  {
+    "answer": {
+      "values": [
+        "UZS"
+      ],
+      "mode": "auto"
+    },
+    "data": {
+      "id": "currency",
+      "kind": "currency",
+      "required": true,
+      "order": 18,
+      "params": {
+        "rate": 11994.1,
+        "rateSource": "cbu",
+        "rateDay": "2026-11-10"
+      },
+      "options": [
+        {
+          "value": "UZS",
+          "label": "UZS",
+          "count": 2,
+          "hint": {
+            "code": "GUESS_ACTIVITY"
+          }
+        }
+      ],
+      "guess": {
+        "values": [
+          "UZS"
+        ],
+        "mode": "auto"
+      },
+      "confidence": 0.85,
+      "answer": null,
+      "impact": {
+        "metric": "paid_amount",
+        "value": 6412000,
+        "guessValue": 6412000,
+        "days": 30
+      }
+    },
+    "id": "currency"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "deal.kelishuv",
+      "kind": "multi",
+      "required": false,
+      "order": 8,
+      "params": {
+        "groups": [
+          {
+            "id": "p:0",
+            "name": "Asosiy"
+          }
+        ],
+        "perGroup": 1
+      },
+      "options": [
+        {
+          "value": "deal:NEW",
+          "label": "Tashrif",
+          "count": 4,
+          "color": "#39a8ef",
+          "group": "p:0"
+        },
+        {
+          "value": "deal:PREPARATION",
+          "label": "Konsultatsiya",
+          "count": 1,
+          "color": "#fde68a",
+          "group": "p:0"
+        },
+        {
+          "value": "deal:PREPAYMENT_INVOICE",
+          "label": "Shartnoma",
+          "count": 1,
+          "color": "#55d0e0",
+          "hint": {
+            "code": "GUESS_NAME"
+          },
+          "group": "p:0"
+        },
+        {
+          "value": "deal:EXECUTING",
+          "label": "To'lov",
+          "count": 2,
+          "color": "#47e4c2",
+          "group": "p:0"
+        }
+      ],
+      "guess": {
+        "values": [
+          "deal:PREPAYMENT_INVOICE"
+        ]
+      },
+      "confidence": 0.7,
+      "answer": null,
+      "impact": {
+        "metric": "kelishuv_deals",
+        "value": 1,
+        "guessValue": 1,
+        "total": 2,
+        "days": 30
+      },
+      "dependsOn": [
+        "deal.pipelines",
+        "deal.stageMap"
+      ]
+    },
+    "id": "deal.kelishuv"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "deal.paymentDate",
+      "kind": "multi",
+      "required": false,
+      "order": 10,
+      "params": {
+        "ordered": 1
+      },
+      "options": [
+        {
+          "value": "field:UF_CRM_6AE325F306B74",
+          "label": "O'ylab ko'radi vaqtini belgilang",
+          "count": 1
+        },
+        {
+          "value": "field:UF_CRM_6AE325F335346",
+          "label": "Qayta aloqa vaqtini belgilang",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F36B071",
+          "label": "Tashrif sanasi",
+          "count": 1
+        },
+        {
+          "value": "field:UF_CRM_6AE325F3AA35F",
+          "label": "Arxiv chiqish sanasi",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F406263",
+          "label": "Birinchi yakunlangan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F432286",
+          "label": "Arxiv tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F43E176",
+          "label": "Bekor bo'ldiga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F448CFA",
+          "label": "Javob bermadiga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F455F9A",
+          "label": "Kelmadiga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F462A8A",
+          "label": "Ne obrabotniyga tushgan sana",
+          "count": 1
+        },
+        {
+          "value": "field:UF_CRM_6AE325F46E447",
+          "label": "O'ylab ko'radiga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F4773C8",
+          "label": "Propushniyga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F481677",
+          "label": "Qayta aloqaga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F491011",
+          "label": "Sifatsiz lidga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F49FA0F",
+          "label": "Tashrif belgilandiga tushgan sana",
+          "count": 1
+        },
+        {
+          "value": "field:UF_CRM_6AE325F4B097D",
+          "label": "Tashrif buyurdiga tushgan sana",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F4D5D36",
+          "label": "Yangi lidga tushgan sana",
+          "count": 1
+        }
+      ],
+      "guess": {
+        "values": []
+      },
+      "confidence": 0.4,
+      "answer": null,
+      "dependsOn": [
+        "deal.pipelines"
+      ]
+    },
+    "id": "deal.paymentDate"
+  },
+  {
+    "answer": {
+      "values": [
+        "won_amount"
+      ]
+    },
+    "data": {
+      "id": "deal.payments",
+      "kind": "single",
+      "required": false,
+      "order": 9,
+      "options": [
+        {
+          "value": "won_amount",
+          "label": "won_amount",
+          "count": 1,
+          "hint": {
+            "code": "GUESS_DEFAULT"
+          }
+        },
+        {
+          "value": "field:UF_CRM_6AE325F299757",
+          "label": "Keladi",
+          "count": 1
+        },
+        {
+          "value": "field:UF_CRM_6AE325F2A318C",
+          "label": "Keldi",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F2AEC32",
+          "label": "Kelmadi",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F2EDC2C",
+          "label": "O'ylab ko'radi (hisoblagich)",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F32ACF7",
+          "label": "Qayta aloqa (hisoblagich)",
+          "count": 0
+        },
+        {
+          "value": "field:UF_CRM_6AE325F3499C3",
+          "label": "Tashrif SP id",
+          "count": 1
+        },
+        {
+          "value": "field:UF_CRM_6AEBFB7A1E267",
+          "label": "Kutilayotgan oylik maosh",
+          "count": 1
+        },
+        {
+          "value": "none",
+          "label": "none"
+        }
+      ],
+      "guess": {
+        "values": [
+          "won_amount"
+        ]
+      },
+      "confidence": 0.6,
+      "answer": null,
+      "impact": {
+        "metric": "paid_amount",
+        "value": 6412000,
+        "guessValue": 6412000,
+        "days": 30
+      }
+    },
+    "id": "deal.payments"
+  },
+  {
+    "answer": {
+      "values": [
+        "0"
+      ]
+    },
+    "data": {
+      "id": "deal.pipelines",
+      "kind": "multi",
+      "required": true,
+      "order": 1,
+      "params": {
+        "pipelines": 2,
+        "internal": [
+          "2"
+        ]
+      },
+      "options": [
+        {
+          "value": "0",
+          "label": "Asosiy",
+          "count": 2,
+          "hint": {
+            "code": "GUESS_NAME"
+          },
+          "won": 1
+        },
+        {
+          "value": "2",
+          "label": "Hiring",
+          "count": 0,
+          "won": 0
+        }
+      ],
+      "guess": {
+        "values": [
+          "0"
+        ]
+      },
+      "confidence": 0.9,
+      "answer": null,
+      "impact": {
+        "metric": "won_deals",
+        "value": 1,
+        "guessValue": 1,
+        "total": 1,
+        "days": 30
+      }
+    },
+    "id": "deal.pipelines"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "deal.reasons",
+      "kind": "multi",
+      "required": false,
+      "order": 11,
+      "params": {
+        "ordered": 1
+      },
+      "options": [
+        {
+          "value": "UF_CRM_6AE325F1EC020",
+          "label": "Zargan pasporti",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_6AE325F25E364",
+          "label": "Qayerdan bilishdi",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_6AE325F285750",
+          "label": "Hududlar",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_6AE325F2BA392",
+          "label": "Mijozning javobi",
+          "count": 0
+        },
+        {
+          "value": "UF_CRM_6AE325F2CA818",
+          "label": "Nima sababdan kelmadi?",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_6AE325F31B5A5",
+          "label": "O'ylab ko'rish sababini belgilang",
+          "count": 2,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_6AE325F35C344",
+          "label": "Tashrif maqsadi",
+          "count": 0
+        },
+        {
+          "value": "UF_CRM_6AE325F3C0AE3",
+          "label": "Arxiv sababini belgilang",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_6AE325F3E858F",
+          "label": "Bekor bo'ldi sababini belgilang",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_6AE325F42172C",
+          "label": "Sifatsizlik sababini belgilang",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_6AEBFB79DB7C7",
+          "label": "Pasportda cheklov bormi",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_6AEBFB79E940E",
+          "label": "Qaysi davlat",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_6AEBFB7A03871",
+          "label": "Ish turi",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_6AEBFB7A11B4A",
+          "label": "Viza turi",
+          "count": 1
+        }
+      ],
+      "guess": {
+        "values": [
+          "UF_CRM_6AE325F2CA818",
+          "UF_CRM_6AE325F31B5A5",
+          "UF_CRM_6AE325F3C0AE3",
+          "UF_CRM_6AE325F3E858F",
+          "UF_CRM_6AE325F42172C"
+        ]
+      },
+      "confidence": 0.85,
+      "answer": null,
+      "dependsOn": [
+        "deal.pipelines"
+      ]
+    },
+    "id": "deal.reasons"
+  },
+  {
+    "answer": {
+      "values": [
+        "UF_CRM_6AE325F37726B"
+      ]
+    },
+    "data": {
+      "id": "deal.reportStage",
+      "kind": "single",
+      "required": false,
+      "order": 6,
+      "params": {
+        "field": "Стадия (для отчетов)",
+        "code": "UF_CRM_6AE325F37726B"
+      },
+      "options": [
+        {
+          "value": "UF_CRM_6AE325F37726B",
+          "label": "Стадия (для отчетов)",
+          "count": 1,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_6AE325F3816C5",
+          "label": "Стадия (для отчетов) 2",
+          "count": 1
+        },
+        {
+          "value": "crm_stage",
+          "label": "crm_stage",
+          "count": 2
+        }
+      ],
+      "guess": {
+        "values": [
+          "crm_stage"
+        ]
+      },
+      "confidence": 0.9,
+      "answer": null
+    },
+    "id": "deal.reportStage"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "deal.stageMap",
+      "kind": "map",
+      "required": false,
+      "order": 7,
+      "params": {
+        "stages": 2,
+        "semantics": 1,
+        "process": 1,
+        "success": 1,
+        "failure": 0,
+        "pipelines": [
+          {
+            "id": "0",
+            "name": "Asosiy",
+            "stages": 2,
+            "deals": 2,
+            "process": 1,
+            "success": 1,
+            "failure": 0,
+            "flagged": 0
+          }
+        ],
+        "flagged": 0
+      },
+      "options": [
+        {
+          "value": "open",
+          "label": "open"
+        },
+        {
+          "value": "won",
+          "label": "won"
+        },
+        {
+          "value": "lost",
+          "label": "lost"
+        }
+      ],
+      "rows": [
+        {
+          "key": "NEW",
+          "label": "Tashrif",
+          "count": 1,
+          "guess": "open",
+          "confidence": 0.95,
+          "group": "p:0"
+        },
+        {
+          "key": "WON",
+          "label": "Muvafaqyatli",
+          "count": 1,
+          "guess": "won",
+          "confidence": 0.95,
+          "group": "p:0"
+        }
+      ],
+      "guess": {
+        "map": {
+          "NEW": "open",
+          "WON": "won"
+        }
+      },
+      "confidence": 0.95,
+      "answer": null,
+      "impact": {
+        "metric": "won_deals",
+        "value": 1,
+        "guessValue": 1,
+        "total": 1,
+        "days": 30
+      },
+      "dependsOn": [
+        "deal.pipelines"
+      ]
+    },
+    "id": "deal.stageMap"
+  },
+  {
+    "answer": {
+      "values": [
+        "UC_Z7WUOU",
+        "UC_ONAVQR",
+        "UC_DZRVOZ"
+      ]
+    },
+    "data": {
+      "id": "lead.qualified",
+      "kind": "multi",
+      "required": false,
+      "order": 4,
+      "params": {
+        "own": 1,
+        "groups": [
+          {
+            "id": "lead",
+            "name": ""
+          },
+          {
+            "id": "p:0",
+            "name": "Asosiy"
+          }
+        ]
+      },
+      "options": [
+        {
+          "value": "NEW",
+          "label": "Ne obrabotinniy",
+          "count": 599,
+          "color": "#39a8ef",
+          "group": "lead"
+        },
+        {
+          "value": "IN_PROCESS",
+          "label": "Yangi lid",
+          "count": 6,
+          "color": "#64e3f5",
+          "group": "lead"
+        },
+        {
+          "value": "PROCESSED",
+          "label": "Propushenniy",
+          "count": 6,
+          "color": "#d9471f",
+          "group": "lead"
+        },
+        {
+          "value": "UC_BSZM16",
+          "label": "Javob bermadi",
+          "count": 11,
+          "color": "#ffa385",
+          "group": "lead"
+        },
+        {
+          "value": "UC_F35MH6",
+          "label": "Qayta aloqa",
+          "count": 21,
+          "color": "#fb923c",
+          "group": "lead"
+        },
+        {
+          "value": "UC_Z7WUOU",
+          "label": "O'ylab ko'radi",
+          "count": 12,
+          "color": "#fcd357",
+          "hint": {
+            "code": "GUESS_NAME"
+          },
+          "group": "lead"
+        },
+        {
+          "value": "UC_ONAVQR",
+          "label": "Tashrif belgilandi",
+          "count": 21,
+          "color": "#2563eb",
+          "hint": {
+            "code": "GUESS_NAME"
+          },
+          "group": "lead"
+        },
+        {
+          "value": "UC_FE1KGW",
+          "label": "Новая стадия",
+          "count": 0,
+          "color": "#00c4fb",
+          "group": "lead"
+        },
+        {
+          "value": "UC_DZRVOZ",
+          "label": "Kelmadi",
+          "count": 4,
+          "color": "#fbbf24",
+          "group": "lead"
+        },
+        {
+          "value": "CONVERTED",
+          "label": "Tashrif buyurdi",
+          "count": 2,
+          "color": "#7bd500",
+          "hint": {
+            "code": "GUESS_NAME"
+          },
+          "group": "lead"
+        },
+        {
+          "value": "deal:NEW",
+          "label": "Tashrif",
+          "count": 4,
+          "color": "#39a8ef",
+          "group": "p:0"
+        },
+        {
+          "value": "deal:PREPARATION",
+          "label": "Konsultatsiya",
+          "count": 1,
+          "color": "#fde68a",
+          "group": "p:0"
+        },
+        {
+          "value": "deal:PREPAYMENT_INVOICE",
+          "label": "Shartnoma",
+          "count": 1,
+          "color": "#55d0e0",
+          "group": "p:0"
+        },
+        {
+          "value": "deal:EXECUTING",
+          "label": "To'lov",
+          "count": 2,
+          "color": "#47e4c2",
+          "group": "p:0"
+        },
+        {
+          "value": "deal:WON",
+          "label": "Muvafaqyatli",
+          "count": 1,
+          "color": "#7bd500",
+          "group": "p:0"
+        }
+      ],
+      "guess": {
+        "values": []
+      },
+      "confidence": 0,
+      "answer": null,
+      "impact": {
+        "metric": "qualified_leads",
+        "value": 33,
+        "guessValue": 0,
+        "total": 598,
+        "days": 30
+      },
+      "dependsOn": [
+        "lead.stageMap",
+        "deal.pipelines"
+      ]
+    },
+    "id": "lead.qualified"
+  },
+  {
+    "answer": {
+      "values": [
+        "UF_CRM_1770609460118",
+        "UF_CRM_1770976355232",
+        "UF_CRM_1770282341169"
+      ]
+    },
+    "data": {
+      "id": "lead.reasons",
+      "kind": "multi",
+      "required": false,
+      "order": 5,
+      "params": {
+        "ordered": 1
+      },
+      "options": [
+        {
+          "value": "UF_CRM_1793270123973",
+          "label": "Zargan pasporti",
+          "count": 39
+        },
+        {
+          "value": "UF_CRM_1770281702742",
+          "label": "Qayerdan bilishdi",
+          "count": 33
+        },
+        {
+          "value": "UF_CRM_1777029526318",
+          "label": "Hududlar",
+          "count": 10
+        },
+        {
+          "value": "UF_CRM_1778050018",
+          "label": "Mijozning javobi",
+          "count": 1
+        },
+        {
+          "value": "UF_CRM_1778387991410",
+          "label": "Nima sababdan kelmadi?",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_1771315127007",
+          "label": "O'ylab ko'rish sababini belgilang",
+          "count": 598,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_1778050724431",
+          "label": "Tashrif maqsadi",
+          "count": 0
+        },
+        {
+          "value": "UF_CRM_1770609460118",
+          "label": "Arxiv sababini belgilang",
+          "count": 2,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_1770976355232",
+          "label": "Bekor bo'ldi sababini belgilang",
+          "count": 3,
+          "hint": {
+            "code": "GUESS_TEMPLATE"
+          }
+        },
+        {
+          "value": "UF_CRM_1770282341169",
+          "label": "Sifatsizlik sababini belgilang",
+          "count": 71,
+          "hint": {
+            "code": "GUESS_TEMPLATE"
+          }
+        },
+        {
+          "value": "UF_CRM_1793848824712",
+          "label": "Pasportda cheklov bormi",
+          "count": 36
+        },
+        {
+          "value": "UF_CRM_1793848950989",
+          "label": "Qaysi davlat",
+          "count": 37
+        },
+        {
+          "value": "UF_CRM_1793849035492",
+          "label": "Ish turi",
+          "count": 34
+        },
+        {
+          "value": "UF_CRM_1793849696894",
+          "label": "Viza turi",
+          "count": 35
+        }
+      ],
+      "guess": {
+        "values": [
+          "UF_CRM_1778387991410",
+          "UF_CRM_1771315127007",
+          "UF_CRM_1770609460118",
+          "UF_CRM_1770976355232",
+          "UF_CRM_1770282341169"
+        ]
+      },
+      "confidence": 0.85,
+      "answer": null
+    },
+    "id": "lead.reasons"
+  },
+  {
+    "answer": {
+      "values": [
+        "UF_CRM_1771440293231"
+      ]
+    },
+    "data": {
+      "id": "lead.reportStage",
+      "kind": "single",
+      "required": false,
+      "order": 2,
+      "params": {
+        "field": "Стадия (для отчетов)",
+        "code": "UF_CRM_1771440293231"
+      },
+      "options": [
+        {
+          "value": "UF_CRM_1771440293231",
+          "label": "Стадия (для отчетов)",
+          "count": 593,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "UF_CRM_1783166097",
+          "label": "Стадия (для отчетов) 2",
+          "count": 593
+        },
+        {
+          "value": "crm_stage",
+          "label": "crm_stage",
+          "count": 598
+        }
+      ],
+      "guess": {
+        "values": [
+          "crm_stage"
+        ]
+      },
+      "confidence": 0.9,
+      "answer": null
+    },
+    "id": "lead.reportStage"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "lead.stageMap",
+      "kind": "map",
+      "required": false,
+      "order": 3,
+      "params": {
+        "stages": 13,
+        "shape": 5,
+        "semantics": 1,
+        "process": 9,
+        "success": 1,
+        "failure": 3,
+        "industry": "retail",
+        "taqsimot": 1
+      },
+      "options": [
+        {
+          "value": "new",
+          "label": "new"
+        },
+        {
+          "value": "contact",
+          "label": "contact"
+        },
+        {
+          "value": "won",
+          "label": "won"
+        },
+        {
+          "value": "lost",
+          "label": "lost"
+        },
+        {
+          "value": "junk",
+          "label": "junk"
+        },
+        {
+          "value": "archive",
+          "label": "archive"
+        }
+      ],
+      "rows": [
+        {
+          "key": "NEW",
+          "label": "Ne obrabotinniy",
+          "count": 469,
+          "guess": "new",
+          "confidence": 0.95
+        },
+        {
+          "key": "IN_PROCESS",
+          "label": "Yangi lid",
+          "count": 3,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "PROCESSED",
+          "label": "Propushenniy",
+          "count": 5,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_BSZM16",
+          "label": "Javob bermadi",
+          "count": 3,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_F35MH6",
+          "label": "Qayta aloqa",
+          "count": 16,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_Z7WUOU",
+          "label": "O'ylab ko'radi",
+          "count": 9,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_ONAVQR",
+          "label": "Tashrif belgilandi",
+          "count": 16,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_FE1KGW",
+          "label": "Новая стадия",
+          "count": 0,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_DZRVOZ",
+          "label": "Kelmadi",
+          "count": 1,
+          "guess": "contact",
+          "confidence": 0.95
+        },
+        {
+          "key": "CONVERTED",
+          "label": "Tashrif buyurdi",
+          "count": 0,
+          "guess": "won",
+          "confidence": 0.95
+        },
+        {
+          "key": "JUNK",
+          "label": "Sandiq",
+          "count": 2,
+          "guess": "archive",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_FY4ZX7",
+          "label": "Sifatsiz lid",
+          "count": 71,
+          "guess": "junk",
+          "confidence": 0.95
+        },
+        {
+          "key": "UC_38RA92",
+          "label": "Bekor bo'ldi",
+          "count": 3,
+          "guess": "lost",
+          "confidence": 0.95
+        }
+      ],
+      "guess": {
+        "map": {
+          "NEW": "new",
+          "IN_PROCESS": "contact",
+          "PROCESSED": "contact",
+          "UC_BSZM16": "contact",
+          "UC_F35MH6": "contact",
+          "UC_Z7WUOU": "contact",
+          "UC_ONAVQR": "contact",
+          "UC_FE1KGW": "contact",
+          "UC_DZRVOZ": "contact",
+          "CONVERTED": "won",
+          "JUNK": "archive",
+          "UC_FY4ZX7": "junk",
+          "UC_38RA92": "lost"
+        }
+      },
+      "confidence": 0.95,
+      "answer": null
+    },
+    "id": "lead.stageMap"
+  },
+  {
+    "answer": {
+      "values": []
+    },
+    "data": {
+      "id": "sources.paid",
+      "kind": "multi",
+      "required": false,
+      "order": 17,
+      "options": [
+        {
+          "value": "CALL",
+          "label": "Звонок",
+          "count": 597
+        },
+        {
+          "value": "EMAIL",
+          "label": "Электронная почта",
+          "count": 0
+        },
+        {
+          "value": "WEB",
+          "label": "Веб-сайт",
+          "count": 0
+        },
+        {
+          "value": "ADVERTISING",
+          "label": "Реклама",
+          "count": 0
+        },
+        {
+          "value": "PARTNER",
+          "label": "Существующий клиент",
+          "count": 0
+        },
+        {
+          "value": "RECOMMENDATION",
+          "label": "По рекомендации",
+          "count": 0
+        },
+        {
+          "value": "TRADE_SHOW",
+          "label": "Выставка",
+          "count": 0
+        },
+        {
+          "value": "WEBFORM",
+          "label": "CRM-форма",
+          "count": 0
+        },
+        {
+          "value": "CALLBACK",
+          "label": "Обратный звонок",
+          "count": 0
+        },
+        {
+          "value": "RC_GENERATOR",
+          "label": "Генератор продаж",
+          "count": 0
+        },
+        {
+          "value": "STORE",
+          "label": "Интернет-магазин",
+          "count": 0
+        },
+        {
+          "value": "OTHER",
+          "label": "Другое",
+          "count": 1
+        },
+        {
+          "value": "BOOKING",
+          "label": "Онлайн-запись",
+          "count": 0
+        },
+        {
+          "value": "REPEAT_SALE",
+          "label": "Повторные продажи",
+          "count": 0
+        }
+      ],
+      "guess": {
+        "values": []
+      },
+      "confidence": 0.4,
+      "answer": null,
+      "impact": {
+        "metric": "paid_leads",
+        "value": 0,
+        "guessValue": 0,
+        "total": 598,
+        "days": 30
+      }
+    },
+    "id": "sources.paid"
+  },
+  {
+    "answer": {
+      "values": [
+        "CALL",
+        "CALLBACK"
+      ]
+    },
+    "data": {
+      "id": "sources.phone",
+      "kind": "multi",
+      "required": false,
+      "order": 16,
+      "options": [
+        {
+          "value": "CALL",
+          "label": "Звонок",
+          "count": 597,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "EMAIL",
+          "label": "Электронная почта",
+          "count": 0
+        },
+        {
+          "value": "WEB",
+          "label": "Веб-сайт",
+          "count": 0
+        },
+        {
+          "value": "ADVERTISING",
+          "label": "Реклама",
+          "count": 0
+        },
+        {
+          "value": "PARTNER",
+          "label": "Существующий клиент",
+          "count": 0
+        },
+        {
+          "value": "RECOMMENDATION",
+          "label": "По рекомендации",
+          "count": 0
+        },
+        {
+          "value": "TRADE_SHOW",
+          "label": "Выставка",
+          "count": 0
+        },
+        {
+          "value": "WEBFORM",
+          "label": "CRM-форма",
+          "count": 0
+        },
+        {
+          "value": "CALLBACK",
+          "label": "Обратный звонок",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "RC_GENERATOR",
+          "label": "Генератор продаж",
+          "count": 0
+        },
+        {
+          "value": "STORE",
+          "label": "Интернет-магазин",
+          "count": 0
+        },
+        {
+          "value": "OTHER",
+          "label": "Другое",
+          "count": 1
+        },
+        {
+          "value": "BOOKING",
+          "label": "Онлайн-запись",
+          "count": 0
+        },
+        {
+          "value": "REPEAT_SALE",
+          "label": "Повторные продажи",
+          "count": 0
+        }
+      ],
+      "guess": {
+        "values": [
+          "CALL",
+          "CALLBACK"
+        ]
+      },
+      "confidence": 0.85,
+      "answer": null,
+      "impact": {
+        "metric": "phone_leads",
+        "value": 597,
+        "guessValue": 597,
+        "total": 598,
+        "days": 30
+      }
+    },
+    "id": "sources.phone"
+  },
+  {
+    "answer": {
+      "values": [
+        "1",
+        "10",
+        "12",
+        "30"
+      ]
+    },
+    "data": {
+      "id": "staff.exclude",
+      "kind": "multi",
+      "required": false,
+      "order": 12,
+      "options": [
+        {
+          "value": "1",
+          "label": "Main (asosiy)",
+          "count": 269
+        },
+        {
+          "value": "10",
+          "label": "data365.services",
+          "count": 0
+        },
+        {
+          "value": "12",
+          "label": "Data365 Support",
+          "count": 1
+        },
+        {
+          "value": "18",
+          "label": "Operator (Shaxzoda) 101",
+          "count": 117
+        },
+        {
+          "value": "20",
+          "label": "None 2",
+          "count": 0
+        },
+        {
+          "value": "22",
+          "label": "None 1",
+          "count": 0
+        },
+        {
+          "value": "24",
+          "label": "None",
+          "count": 0
+        },
+        {
+          "value": "28",
+          "label": "Operator (Zuhra) 100",
+          "count": 104
+        },
+        {
+          "value": "30",
+          "label": "Admin",
+          "count": 0,
+          "hint": {
+            "code": "GUESS_NAME"
+          }
+        },
+        {
+          "value": "32",
+          "label": "Operator 102 (Mushtariy)",
+          "count": 109
+        }
+      ],
+      "guess": {
+        "values": [
+          "30"
+        ]
+      },
+      "confidence": 0.8,
+      "answer": null,
+      "impact": {
+        "metric": "sales_staff",
+        "value": 3,
+        "guessValue": 3
+      }
+    },
+    "id": "staff.exclude"
+  },
+  {
+    "answer": {
+      "values": [
+        "18",
+        "28",
+        "32"
+      ]
+    },
+    "data": {
+      "id": "staff.sales",
+      "kind": "multi",
+      "required": true,
+      "order": 13,
+      "params": {
+        "users": 0
+      },
+      "options": [
+        {
+          "value": "1",
+          "label": "Main (asosiy)",
+          "count": 269
+        },
+        {
+          "value": "10",
+          "label": "data365.services",
+          "count": 0
+        },
+        {
+          "value": "12",
+          "label": "Data365 Support",
+          "count": 1
+        },
+        {
+          "value": "18",
+          "label": "Operator (Shaxzoda) 101",
+          "count": 117
+        },
+        {
+          "value": "28",
+          "label": "Operator (Zuhra) 100",
+          "count": 104
+        },
+        {
+          "value": "30",
+          "label": "Admin",
+          "count": 0
+        },
+        {
+          "value": "32",
+          "label": "Operator 102 (Mushtariy)",
+          "count": 109
+        }
+      ],
+      "guess": {
+        "values": []
+      },
+      "confidence": 0.3,
+      "answer": null,
+      "impact": {
+        "metric": "sales_staff",
+        "value": 3,
+        "guessValue": 0
+      },
+      "dependsOn": [
+        "staff.exclude"
+      ]
+    },
+    "id": "staff.sales"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "taqsimot.hours",
+      "kind": "single",
+      "required": false,
+      "order": 15,
+      "options": [
+        {
+          "value": "08-17",
+          "label": "08:00 – 17:00"
+        },
+        {
+          "value": "09-18",
+          "label": "09:00 – 18:00"
+        },
+        {
+          "value": "10-19",
+          "label": "10:00 – 19:00"
+        },
+        {
+          "value": "09-20",
+          "label": "09:00 – 20:00"
+        },
+        {
+          "value": "08-20",
+          "label": "08:00 – 20:00"
+        }
+      ],
+      "guess": {
+        "values": [
+          "09-18"
+        ]
+      },
+      "confidence": 0.6,
+      "answer": null
+    },
+    "id": "taqsimot.hours"
+  },
+  {
+    "answer": null,
+    "data": {
+      "id": "taqsimot.main",
+      "kind": "multi",
+      "required": false,
+      "order": 14,
+      "options": [
+        {
+          "value": "1",
+          "label": "Main (asosiy)",
+          "count": 269,
+          "hint": {
+            "code": "GUESS_ACTIVITY"
+          }
+        },
+        {
+          "value": "10",
+          "label": "data365.services",
+          "count": 0
+        },
+        {
+          "value": "12",
+          "label": "Data365 Support",
+          "count": 1
+        },
+        {
+          "value": "18",
+          "label": "Operator (Shaxzoda) 101",
+          "count": 117
+        },
+        {
+          "value": "28",
+          "label": "Operator (Zuhra) 100",
+          "count": 104
+        },
+        {
+          "value": "30",
+          "label": "Admin",
+          "count": 0
+        },
+        {
+          "value": "32",
+          "label": "Operator 102 (Mushtariy)",
+          "count": 109
+        }
+      ],
+      "guess": {
+        "values": [
+          "1"
+        ]
+      },
+      "confidence": 0.5,
+      "answer": null,
+      "dependsOn": [
+        "staff.sales"
+      ]
+    },
+    "id": "taqsimot.main"
+  }
+]

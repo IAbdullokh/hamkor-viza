@@ -1,0 +1,83 @@
+/*
+ * "Ko'rinish" → Effektlar and Kartalar (lib/viewLook): one viewer's own calmer look for the dashboard on screen.
+ * ThemeController writes data-fx="off" and data-card="solid" | "line" on <html> only while that viewer chose them (Shisha
+ * and effects on are the default, no attribute).
+ * The card rules set the glass tokens ON the card itself (.panel, .look-card, .look-kpi), so they win over every look's,
+ * mood's and Fon's :root tokens without a specificity race, and a look's own layout (Minimal's open blocks, Midnight's
+ * KPI strip) keeps its shape. The doubled attribute lifts the few direct rules above the looks' `:root[data-design] .x`.
+ */
+
+/* ---------- Effektlar: off — no blur, no orbs or sky, no sheen or pointer light, light shadows, no animation ---------- */
+:root[data-fx='off'] .wallpaper > * {
+  display: none;
+}
+:root[data-fx='off'] *,
+:root[data-fx='off'] *::before,
+:root[data-fx='off'] *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* without the blur, chrome and menus turn solid so text over content stays readable */
+:root[data-fx='off'][data-fx] .glass,
+:root[data-fx='off'][data-fx] .glass-pop {
+  background: var(--surface-solid);
+}
+/* dark: the chrome keeps its own graphite step (sidebar #232325 under #2c2c2e cards), not the card colour */
+:root[data-fx='off'][data-fx][data-theme='dark'] .glass {
+  background: rgb(var(--glass-rgb));
+}
+:root[data-fx='off'][data-fx] :is(.panel, .look-card, .look-kpi, .glass, .glass-pop) {
+  --glow-a: 0;
+  --spot-on: transparent;
+  --glass-sheen: transparent;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.08);
+  --shadow-lift: 0 1px 3px rgb(0 0 0 / 0.12);
+  --shadow-pop: 0 6px 20px -6px rgb(0 0 0 / 0.28);
+  --shadow-depth: var(--shadow-card);
+}
+:root[data-fx='off'][data-fx] .panel::after,
+:root[data-fx='off'][data-fx] .is-refreshing::after {
+  display: none;
+}
+:root[data-fx='off'] .is-refreshing > * {
+  filter: none;
+}
+
+/* ---------- Fon effektlari: off — only the orbs / sky behind the page go; the page keeps its Fon colour (.wallpaper's
+   own background) and the cards their glass and motion ---------- */
+:root[data-bgfx='off'] .wallpaper > * {
+  display: none;
+}
+
+/* ---------- Kartalar: Oddiy (solid, soft shadow) and Chiziqli (flat, thin border) — no glass on the card ---------- */
+:root[data-card][data-card] :is(.panel, .look-card, .look-kpi) {
+  --glass-a: 1;
+  --glass-a-dense: 1;
+  --rim-a: 0;
+  --rim-b: 0;
+  --glow-a: 0;
+  --glass-rim: transparent;
+  --glass-sheen: transparent;
+  --spot-on: transparent;
+  --shadow-depth: var(--shadow-card);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* Glass Pro's lit gradient rim */
+:root[data-card][data-card] :is(.look-card, .look-kpi)::after {
+  display: none;
+}
+:root[data-card='solid'][data-card] :is(.panel, .look-card, .look-kpi) {
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 6px 18px -10px rgb(15 23 42 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.06), 0 12px 26px -12px rgb(15 23 42 / 0.22);
+}
+:root[data-card='solid'][data-theme='dark'] :is(.panel, .look-card, .look-kpi) {
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 22px -12px rgb(0 0 0 / 0.55);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.32), 0 14px 30px -12px rgb(0 0 0 / 0.6);
+}
+:root[data-card='line'][data-card] :is(.panel, .look-card, .look-kpi) {
+  /* a hairline in the page's own ink: visible on every page, light or dark */
+  --glass-line: color-mix(in srgb, var(--ink) 22%, transparent);
+  --shadow-card: none;
+  --shadow-lift: 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent);
+}

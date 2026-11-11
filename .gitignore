@@ -1,0 +1,11 @@
+node_modules/
+dist/
+# a saved snapshot of the dashboard's real data (npm run snapshot): client data, never committed
+data/
+.env
+.env.local
+.env.*.local
+*.log
+.vite/
+coverage/
+.DS_Store

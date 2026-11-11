@@ -1,0 +1,331 @@
+/*
+ * A dashboard's plain background (lib/pageBg, "Fon" in the edit bar): data-bg on <html> while the dashboard is shown.
+ * No orbs (and no living sky), no pointer light, no sheen; the cards turn solid with a hairline and a soft shadow so
+ * they still stand apart from a white page. The repeated [data-bg] lifts these rules above the looks'
+ * `:root[data-design][data-theme]` and the Aralash moods' `:root[data-mood][data-mood][data-theme]` blocks.
+ */
+:root[data-bg] .wallpaper > * {
+  display: none;
+}
+
+:root[data-bg][data-bg][data-bg][data-bg] {
+  --orb-o: 0;
+  --spot-on: transparent;
+  --glow-a: 0;
+}
+
+/* ---------- Grafit (owner, 2026-10-27: "I like this version, save it as one"): the calm graphite dark (tokens.css)
+   with the orbs kept, faint and muted, behind the glass ---------- */
+:root[data-bg='graphite']:not([data-fx='off']):not([data-bgfx='off']) .wallpaper > * {
+  display: block;
+}
+:root[data-bg='graphite'][data-bg][data-bg][data-bg][data-bg] {
+  --orb-1: #3a5a9a;
+  --orb-2: #5a4c8c;
+  --orb-3: #2f6c66;
+  --orb-4: #6e5642;
+  --orb-5: #6a4060;
+  --orb-o: calc(0.06 + var(--lq) * 0.1);
+  --spot-on: rgb(255 255 255 / 0.03);
+  --glow-a: calc(var(--lq) * 0.025);
+}
+
+/* ---------- the light pages (Yumshoq yorug' / Oq / Kulrang / Kulrang sokin / Iliq): solid white cards ---------- */
+:root[data-bg='soft'][data-bg][data-bg][data-bg],
+:root[data-bg='white'][data-bg][data-bg][data-bg],
+:root[data-bg='gray'][data-bg][data-bg][data-bg],
+:root[data-bg='ash'][data-bg][data-bg][data-bg],
+:root[data-bg='paper'][data-bg][data-bg][data-bg] {
+  --page-bg: #f7f8fa;
+  --card-rgb: 255 255 255;
+  --glass-rgb: 255 255 255;
+  --glass-a: 1;
+  --glass-a-dense: 1;
+  --glass-a-strong: 0.9;
+  --glass-line: rgb(15 23 42 / 0.09);
+  --rim-a: 0;
+  --rim-b: 0;
+  --glass-rim: rgb(255 255 255 / 0);
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 14px -8px rgb(15 23 42 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.06), 0 12px 26px -12px rgb(15 23 42 / 0.18);
+  --lens-bg: #ffffff;
+  --surface: #ffffff;
+  --surface-hover: #ffffff;
+  --surface-solid: #ffffff;
+  /* chart marks at 3:1 or more on white; blue and violet are not neighbours, red stays out of the first four */
+  --chart-1: #3d5fd6;
+  --chart-2: #14897a;
+  --chart-3: #c27a00;
+  --chart-4: #7a5bd6;
+  --chart-5: #c93f63;
+  --chart-6: #2b8fc0;
+  --chart-7: #a0569a;
+  --chart-8: #8592a6;
+}
+/* Kulrang: a real grey page (it was nearly Oq: 1.06 → 1.2 card against page) */
+:root[data-bg='gray'][data-bg][data-bg][data-bg] {
+  --ink-3: #5f6066; /* secondary text straight on the grey page: 5.0:1 (the default #6b6b70 was 4.47) */
+  --page-bg: #e9ecf0;
+  --glass-line: rgb(15 23 42 / 0.1);
+}
+/* Yumshoq yorug': off-white with a blue tint, navy ink (all text pairs 5.4:1 or more) */
+:root[data-bg='soft'][data-bg][data-bg][data-bg] {
+  --page-bg: #eef3f9;
+  --glass-line: #d8e1ee;
+  --border: #d8e1ee;
+  --border-strong: #c3cfe0;
+  --surface-2: rgb(47 86 204 / 0.07);
+  --shadow-card: 0 1px 2px rgb(20 33 61 / 0.05), 0 4px 14px -8px rgb(20 33 61 / 0.12);
+  --ink: #14213d;
+  --ink-2: #3d4b63;
+  --ink-3: #5a677d;
+  --good: #127a55;
+  --warm: #9a5a00;
+  --danger: #c0262d;
+  --chart-1: #2f5fd0;
+  --chart-grid: rgb(90 103 125 / 0.16);
+  --chart-axis: rgb(90 103 125 / 0.34);
+}
+
+/*
+ * ---------- the calm workspaces (owner 2026-10-27): long data work, no orbs, no colour cast ----------
+ * Kulrang (sokin): neutral grey page, white cards, a lighter chrome. Text on page / card / chrome: ink 14.5 / 16.8 / 15.7,
+ * ink-2 6.8 / 7.9 / 7.4, ink-3 4.8 / 5.5 / 5.2.
+ */
+:root[data-bg='ash'][data-bg][data-bg][data-bg] {
+  --page-bg: #eceef1;
+  --glass-rgb: 246 247 249;
+  --glass-a-strong: 1;
+  --glass-line: rgb(0 0 0 / 0.08);
+  --border: rgb(0 0 0 / 0.08);
+  --border-strong: rgb(0 0 0 / 0.16);
+  --surface-2: rgb(0 0 0 / 0.045);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 14px -8px rgb(0 0 0 / 0.1);
+  --ink: #1d1d1f;
+  --ink-2: #515154;
+  --ink-3: #68686d;
+  --chart-grid: rgb(0 0 0 / 0.07);
+  --chart-axis: rgb(0 0 0 / 0.2);
+}
+/* Iliq: warm paper page, cream cards, warm brown-grey ink. Page / card / chrome: ink 13.4 / 14.7 / 13.9, ink-2 6.6 / 7.2 /
+   6.8, ink-3 5.0 / 5.5 / 5.1 */
+:root[data-bg='paper'][data-bg][data-bg][data-bg] {
+  --page-bg: #f4f2ee;
+  --card-rgb: 255 253 250;
+  --glass-rgb: 248 246 242;
+  --glass-a-strong: 1;
+  --lens-bg: #fffdfa;
+  --surface: #fffdfa;
+  --surface-hover: #fffdfa;
+  --surface-solid: #fffdfa;
+  --glass-line: rgb(60 40 20 / 0.08);
+  --border: rgb(60 40 20 / 0.08);
+  --border-strong: rgb(60 40 20 / 0.16);
+  --surface-2: rgb(60 40 20 / 0.045);
+  --shadow-card: 0 1px 2px rgb(60 40 20 / 0.04), 0 4px 14px -8px rgb(60 40 20 / 0.1);
+  --shadow-lift: 0 2px 4px rgb(60 40 20 / 0.05), 0 12px 26px -12px rgb(60 40 20 / 0.16);
+  --ink: #2b2622;
+  --ink-2: #5c554e;
+  --ink-3: #70675e;
+  --chart-grid: rgb(60 40 20 / 0.08);
+  --chart-axis: rgb(60 40 20 / 0.22);
+}
+
+/* ---------- the dark pages (Yumshoq tun / Tumanli / Shifer / Ko'k tun / Qorong'i): solid cards a step lighter ---------- */
+:root[data-bg='night'][data-bg][data-bg][data-bg],
+:root[data-bg='dim'][data-bg][data-bg][data-bg],
+:root[data-bg='slate'][data-bg][data-bg][data-bg],
+:root[data-bg='navy'][data-bg][data-bg][data-bg],
+:root[data-bg='dark'][data-bg][data-bg][data-bg] {
+  --glass-a: 1;
+  --glass-a-dense: 1;
+  --glass-a-strong: 0.94;
+  --rim-a: 0;
+  --rim-b: 0;
+  --glass-rim: rgb(255 255 255 / 0.03);
+  --surface: rgb(255 255 255 / 0.06);
+  --surface-hover: rgb(255 255 255 / 0.1);
+}
+/* Qorong'i: Apple's graphite with no colour cast (tokens.css dark): page #1c1c1e, cards #2c2c2e, controls #3a3a3c */
+:root[data-bg='dark'][data-bg][data-bg][data-bg] {
+  --page-bg: #1c1c1e;
+  --card-rgb: 44 44 46;
+  --glass-rgb: 35 35 37;
+  --surface-solid: #3a3a3c;
+  --lens-bg: #3a3a3c;
+  --glass-line: rgb(255 255 255 / 0.08);
+  --border: rgb(255 255 255 / 0.08);
+  --ink: #f5f5f7;
+  --ink-2: #b8b8bd;
+  --ink-3: #a6a6ab;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.45);
+}
+/* Ko'k tun: dark navy (text 5.5–11.8:1, chart marks 5.3–7.8:1 on the card) */
+:root[data-bg='navy'][data-bg][data-bg][data-bg] {
+  --page-bg: #16233a;
+  --card-rgb: 30 45 71;
+  --glass-rgb: 39 58 90;
+  --surface-solid: #273a5a;
+  --lens-bg: #273a5a;
+  --glass-line: #2f4366;
+  --border: rgb(184 197 218 / 0.14);
+  --border-strong: rgb(184 197 218 / 0.26);
+  --surface-2: rgb(184 197 218 / 0.09);
+  --shadow-card: 0 1px 2px rgb(5 12 25 / 0.35), 0 8px 24px -12px rgb(5 12 25 / 0.55);
+  --shadow-lift: 0 2px 4px rgb(5 12 25 / 0.35), 0 14px 30px -12px rgb(5 12 25 / 0.6);
+  --ink: #e8eef8;
+  --ink-2: #b8c5da;
+  --ink-3: #93a4c0;
+  --good: #5fd4a0;
+  --warm: #f2b95c;
+  --danger: #ff8a80;
+  --chart-1: #7aa7ff;
+  --chart-2: #45c4b0;
+  --chart-3: #f2b95c;
+  --chart-4: #c9a3ff;
+  --chart-5: #ff8fa3;
+  --chart-6: #6cc4ec;
+  --chart-7: #e3a6d6;
+  --chart-8: #8fa1bf;
+  --chart-grid: rgb(147 164 192 / 0.14);
+  --chart-axis: rgb(147 164 192 / 0.3);
+}
+/* Shifer: a mid-tone blue-grey (text 5.2–9.7:1) */
+:root[data-bg='slate'][data-bg][data-bg][data-bg] {
+  --page-bg: #2a3442;
+  --card-rgb: 52 63 80;
+  --glass-rgb: 62 74 93;
+  --surface-solid: #3e4a5d;
+  --lens-bg: #3e4a5d;
+  --glass-line: #4a5769;
+  --border: rgb(207 215 226 / 0.15);
+  --border-strong: rgb(207 215 226 / 0.28);
+  --surface-2: rgb(207 215 226 / 0.1);
+  --shadow-card: 0 1px 2px rgb(10 16 26 / 0.25), 0 8px 24px -12px rgb(10 16 26 / 0.45);
+  --ink: #f2f5f9;
+  --ink-2: #cfd7e2;
+  --ink-3: #b6c1cf; /* ≥ 4.5:1 on the slate sidebar too (was #aab6c6, 4.44) */
+  --good: #6fdcaa;
+  --warm: #f5c26b;
+  --danger: #ff9b91;
+  --chart-1: #8db4ff;
+  --chart-2: #5ccdb9;
+  --chart-3: #f5c26b;
+  --chart-4: #d0b0ff;
+  --chart-5: #ff9fb1;
+  --chart-6: #7fd0f0;
+  --chart-7: #e8b2dc;
+  --chart-8: #a5b1c2;
+  --chart-grid: rgb(170 182 198 / 0.16);
+  --chart-axis: rgb(170 182 198 / 0.32);
+}
+/*
+ * Yumshoq tun: the dark twin of Yumshoq yorug' (owner 2026-10-27) — a calm neutral graphite a hint cooler (page #1b1d21,
+ * chrome #222428, cards #26272b, rows #313338), quiet hairlines, bright white numbers. Text on card / row: ink 13.7 / 11.6,
+ * ink-2 7.6 / 6.4, ink-3 6.2 / 5.2.
+ */
+:root[data-bg='night'][data-bg][data-bg][data-bg] {
+  --page-bg: #1b1d21;
+  --card-rgb: 38 39 43;
+  --glass-rgb: 34 36 40;
+  --glass-a-strong: 1;
+  --surface-solid: #313338;
+  --lens-bg: #313338;
+  --surface: rgb(255 255 255 / 0.05);
+  --surface-hover: rgb(255 255 255 / 0.09);
+  --surface-2: rgb(255 255 255 / 0.06);
+  --glass-line: rgb(255 255 255 / 0.07);
+  --border: rgb(255 255 255 / 0.07);
+  --border-strong: rgb(255 255 255 / 0.14);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.28), 0 6px 20px -10px rgb(0 0 0 / 0.5);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.3), 0 12px 26px -12px rgb(0 0 0 / 0.55);
+  --ink: #f5f5f7;
+  --ink-2: #b8b8bd;
+  --ink-3: #a6a6ab;
+  --chart-grid: rgb(255 255 255 / 0.07);
+  --chart-axis: rgb(255 255 255 / 0.2);
+}
+/* Glass Pro on Yumshoq tun: every card keeps its own colour like the light Yumshoq, retuned for dark — a low wash of the
+   block colour (16% → 5%), a brighter left strip, the band on the card head lighter; numbers stay white (9.1:1 or more
+   on the most tinted card), labels a light tint of the block colour (6.4:1 or more) */
+:root[data-bg='night'][data-design='glasspro'] .look-kpi {
+  background-image: linear-gradient(135deg, rgb(var(--tile) / 0.16), rgb(var(--tile) / 0.05) 70%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(var(--tile) / 0.14), var(--shadow-card);
+}
+:root[data-bg='night'][data-design='glasspro'] .look-card {
+  background-image: none;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), var(--shadow-card);
+}
+:root[data-bg='night'][data-design='glasspro'] .look-card::after,
+:root[data-bg='night'][data-design='glasspro'] .look-kpi::after {
+  background: linear-gradient(140deg, rgb(255 255 255 / 0.08), rgb(var(--tile, var(--accent-rgb)) / 0.18) 50%, rgb(255 255 255 / 0.02));
+}
+:root[data-bg='night'][data-design='glasspro'] .look-card-head {
+  background: linear-gradient(90deg, rgb(var(--tile) / 0.22), rgb(var(--tile) / 0.08) 60%, rgb(var(--tile) / 0.02));
+  border-bottom-color: rgb(var(--tile) / 0.22);
+  box-shadow: inset 0 3px 0 rgb(var(--tile) / 0.9);
+}
+:root[data-bg='night'][data-design='glasspro'] .look-card-title,
+:root[data-bg='night'][data-design='glasspro'] .look-kpi-label {
+  color: color-mix(in srgb, rgb(var(--tile)) 45%, var(--ink));
+}
+:root[data-bg='night'][data-design='glasspro'] .look-kpi-num {
+  color: var(--ink);
+}
+:root[data-bg='night'][data-design='glasspro'] .look-kpi-strip {
+  background: linear-gradient(180deg, rgb(var(--tile)), rgb(var(--tile) / 0.7));
+  box-shadow: 0 0 12px rgb(var(--tile) / 0.45);
+}
+:root[data-bg='night'][data-design='glasspro'] .look-kpi-tile {
+  box-shadow: 0 4px 12px -6px rgb(var(--tile) / 0.6);
+}
+
+/*
+ * Tumanli: a dim mid-dark grey, never black — page #2a2e35, chrome #30343c, cards #353a42, rows #3f444d. Text on card /
+ * row: ink 10.0 / 8.6, ink-2 6.8 / 5.8, ink-3 5.4 / 4.7. Chart marks keep the dark set (3.1:1 or more on a card).
+ */
+:root[data-bg='dim'][data-bg][data-bg][data-bg] {
+  --page-bg: #2a2e35;
+  --card-rgb: 53 58 66;
+  --glass-rgb: 48 52 60;
+  --glass-a-strong: 1;
+  --surface-solid: #3f444d;
+  --lens-bg: #3f444d;
+  --surface: rgb(255 255 255 / 0.05);
+  --surface-hover: rgb(255 255 255 / 0.09);
+  --surface-2: rgb(255 255 255 / 0.06);
+  --glass-line: rgb(255 255 255 / 0.08);
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --shadow-card: 0 1px 2px rgb(10 12 16 / 0.22), 0 6px 20px -10px rgb(10 12 16 / 0.4);
+  --shadow-lift: 0 2px 4px rgb(10 12 16 / 0.26), 0 12px 26px -12px rgb(10 12 16 / 0.48);
+  --ink: #eef0f3;
+  --ink-2: #c3c7cf;
+  --ink-3: #aeb3bc;
+  --danger: #ff9b91;
+  --chart-grid: rgb(255 255 255 / 0.08);
+  --chart-axis: rgb(255 255 255 / 0.22);
+}
+:root[data-bg='dim'][data-bg][data-bg][data-bg][data-accent='blue'] {
+  --primary-strong: #7cb4ff;
+}
+
+/* the accent's strong text on the two blue dark pages: a touch lighter for blue so links stay 6:1+ */
+:root[data-bg='navy'][data-bg][data-bg][data-bg][data-accent='blue'] {
+  --primary-strong: #8fb3ff;
+  --focus: #8fb3ff;
+}
+:root[data-bg='slate'][data-bg][data-bg][data-bg][data-accent='blue'] {
+  --primary-strong: #a9c4ff;
+  --focus: #a9c4ff;
+}
+
+/* the swatch in "Fon ▾" */
+.pagebg-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgb(120 120 128 / 0.35);
+}

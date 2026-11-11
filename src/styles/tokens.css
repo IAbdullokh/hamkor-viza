@@ -1,0 +1,260 @@
+/*
+ * Data365 Studio design tokens — "Liquid Glass" system (same family as Applekor ERP and WordGarden).
+ *
+ * --lq (0..1) is the "Liquid Glass" amount chosen in Personalisation: more liquid = clearer glass,
+ * brighter orbs. Accent colours come from data-accent (each workspace has its own accent);
+ * data-glass="tinted" makes glass denser and tinted with the accent.
+ *
+ * The theme is always resolved in JS, so <html> always carries data-theme="light" or "dark".
+ *
+ * Contrast rules: --primary-strong is used for text (>= 4.5:1 on light surfaces, a light tint in dark mode).
+ * --primary-fill is the filled-button colour (>= 4.5:1 against white text in every theme).
+ */
+:root {
+  --lq: 0.6;
+
+  /* Page + wallpaper orbs */
+  --page-bg: #eef0f6;
+  --orb-1: #86b2ff;
+  --orb-2: #b7a0ff;
+  --orb-3: #7adfcb;
+  --orb-4: #ffc19c;
+  --orb-5: #ff9fc6;
+  --orb-o: calc(0.3 + var(--lq) * 0.55);
+  --orb-blur: calc(70px - 30px * var(--lq));
+
+  /* Glass */
+  --glass-rgb: 255 255 255;
+  --card-rgb: 255 255 255;
+  --glass-a: calc(0.76 - var(--lq) * 0.46);
+  --glass-a-strong: calc(0.64 - var(--lq) * 0.5);
+  --glass-a-pop: calc(0.97 - var(--lq) * 0.07);
+  --glass-a-dense: calc(0.9 - var(--lq) * 0.18);
+  --glass-blur: calc(32px - var(--lq) * 18px);
+  --glass-blur-panel: calc(44px - var(--lq) * 32px);
+  --glass-sat: calc(1.45 + var(--lq) * 0.9);
+  --rim-a: calc(0.55 + var(--lq) * 0.45);
+  --rim-b: calc(0.1 + var(--lq) * 0.25);
+  --glow-a: calc(var(--lq) * 0.32);
+  --glass-rim: rgb(255 255 255 / var(--rim-a));
+  --glass-sheen: rgb(255 255 255 / var(--glow-a));
+  --glass-line: rgb(255 255 255 / calc(0.35 + var(--lq) * 0.3));
+  --spot-on: rgb(255 255 255 / calc(0.32 + var(--lq) * 0.3));
+  --lens-bg: rgb(255 255 255 / calc(0.98 - var(--lq) * 0.3));
+  --lens-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 3px 10px -2px rgb(0 0 0 / 0.12);
+  --shadow-card: 0 1px 1px rgb(0 0 0 / 0.02), 0 6px 22px -10px rgb(28 32 60 / 0.16);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.03), 0 14px 32px -12px rgb(28 32 60 / 0.24);
+  --shadow-pop: 0 2px 6px rgb(0 0 0 / 0.04), 0 24px 56px -16px rgb(20 24 50 / 0.32);
+
+  /* Surfaces used by controls (fields, chips, secondary buttons) */
+  --surface: rgb(255 255 255 / 0.78);
+  --surface-hover: rgb(255 255 255 / 0.95);
+  --surface-2: rgb(120 120 128 / 0.1);
+  --surface-solid: #ffffff;
+  --border: rgb(120 120 128 / 0.16);
+  --border-strong: rgb(120 120 128 / 0.28);
+
+  /* Text */
+  --ink: #1d1d1f;
+  --ink-2: #545458;
+  --ink-3: #6b6b70;
+
+  /* Accent (blue — Data365 Studio default) */
+  --accent-rgb: 74 109 228;
+  --primary: #4a6de4;
+  --primary-strong: #2f52c9;
+  --primary-fill: #2f52c9;
+  --primary-soft: rgb(var(--accent-rgb) / 0.14);
+  --on-primary: #ffffff;
+  --focus: #2f52c9;
+
+  /* Semantic colours */
+  --mint: #bfe8da;
+  --mint-ink: #176a4e;
+  --good: #1f9d6b;
+  --warm: #9a4709;
+  --warm-soft: rgb(245 158 11 / 0.16);
+  --danger: #c0262d;
+  --danger-soft: rgb(244 63 94 / 0.12);
+
+  /* Chart series (Applekor palette) — ECharts reads these through charts/theme.ts */
+  --chart-1: #3d5fd6;
+  --chart-2: #21a595;
+  --chart-3: #7c6be6;
+  --chart-4: #e5536b;
+  --chart-5: #c27a00;
+  --chart-6: #3fa7d6;
+  --chart-7: #c2569e;
+  --chart-8: #8592a6;
+  --chart-grid: rgb(120 120 128 / 0.16);
+  --chart-axis: rgb(120 120 128 / 0.32);
+
+  color-scheme: light;
+}
+
+/*
+ * ---------- Dark: Apple's graphite ----------
+ * Neutral steps, no colour cast: page #1c1c1e, chrome (sidebar, top bar) #232325, cards #2c2c2e, rows / controls #3a3a3c
+ * (--surface over a card), hover a step lighter. Quiet hairlines, small shadows, faint orbs. Colour only where it means
+ * something: icon tiles, the accent, chart series, status. Text on every level up to #3a3a3c: ink 10.4:1, ink-2 5.6:1,
+ * ink-3 4.7:1 or more.
+ */
+:root[data-theme='dark'] {
+  --page-bg: #1c1c1e;
+  --orb-1: #2c62d6;
+  --orb-2: #6242c2;
+  --orb-3: #138073;
+  --orb-4: #9a5432;
+  --orb-5: #8a2f63;
+  --orb-o: calc(0.2 + var(--lq) * 0.32);
+  --glass-rgb: 35 35 37;
+  --card-rgb: 44 44 46;
+  --glass-a: calc(0.96 - var(--lq) * 0.16);
+  --glass-a-strong: calc(0.9 - var(--lq) * 0.16);
+  --glass-a-pop: 0.97;
+  --glass-a-dense: calc(0.98 - var(--lq) * 0.06);
+  --glass-sat: calc(1.1 + var(--lq) * 0.2);
+  --rim-a: calc(0.05 + var(--lq) * 0.07);
+  --rim-b: 0.02;
+  --glow-a: calc(var(--lq) * 0.025);
+  --glass-rim: rgb(255 255 255 / calc(0.04 + var(--lq) * 0.04));
+  --glass-line: rgb(255 255 255 / 0.08);
+  --spot-on: rgb(255 255 255 / 0.03);
+  --lens-bg: rgb(255 255 255 / 0.13);
+  --lens-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.22), 0 4px 14px -6px rgb(0 0 0 / 0.3);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.26), 0 10px 24px -10px rgb(0 0 0 / 0.42);
+  --shadow-pop: 0 4px 12px rgb(0 0 0 / 0.3), 0 18px 40px -12px rgb(0 0 0 / 0.5);
+  --surface: rgb(255 255 255 / 0.07);
+  --surface-hover: rgb(255 255 255 / 0.12);
+  --surface-2: rgb(255 255 255 / 0.07);
+  --surface-solid: #2c2c2e;
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+  --ink: #f5f5f7;
+  --ink-2: #b8b8bd;
+  --ink-3: #a6a6ab;
+  /* Apple's dark system blue: a vivid accent, a deeper fill for white text (4.9:1), a lighter tint for text (4.9:1) */
+  --accent-rgb: 10 132 255;
+  --primary: #0a84ff;
+  --primary-strong: #5eb0ff;
+  --primary-fill: #0a6ee0;
+  --primary-soft: rgb(var(--accent-rgb) / 0.22);
+  --focus: #0a84ff;
+  --mint: #203a29;
+  --mint-ink: #30d158;
+  --good: #30d158;
+  --warm: #ff9f0a;
+  --warm-soft: rgb(255 159 10 / 0.16);
+  --danger: #ff6961;
+  --danger-soft: rgb(255 69 58 / 0.16);
+  /* Apple's dark system colours, every mark 3.8:1 or more on a card */
+  --chart-1: #0a84ff;
+  --chart-2: #30d158;
+  --chart-3: #bf5af2;
+  --chart-4: #ff375f;
+  --chart-5: #ff9f0a;
+  --chart-6: #64d2ff;
+  --chart-7: #ffd60a;
+  --chart-8: #98989d;
+  --chart-grid: rgb(255 255 255 / 0.08);
+  --chart-axis: rgb(255 255 255 / 0.2);
+  color-scheme: dark;
+}
+
+/* ---------- Accent themes (one per workspace) ---------- */
+:root[data-accent='violet'] { --accent-rgb: 115 103 240; --primary: #7367f0; --primary-strong: #5b4ee0; --primary-fill: #5b4ee0; --focus: #5b4ee0; }
+:root[data-accent='pink'] { --accent-rgb: 236 72 153; --primary: #ec4899; --primary-strong: #be185d; --primary-fill: #be185d; --focus: #be185d; }
+:root[data-accent='orange'] { --accent-rgb: 249 115 22; --primary: #f97316; --primary-strong: #b93d0a; --primary-fill: #b93d0a; --focus: #b93d0a; }
+:root[data-accent='green'] { --accent-rgb: 16 185 129; --primary: #10b981; --primary-strong: #036b4e; --primary-fill: #036b4e; --focus: #036b4e; }
+:root[data-accent='teal'] { --accent-rgb: 33 165 149; --primary: #21a595; --primary-strong: #0f6d62; --primary-fill: #0f6d62; --focus: #0f6d62; }
+:root[data-accent='graphite'] { --accent-rgb: 113 113 122; --primary: #71717a; --primary-strong: #3f3f46; --primary-fill: #3f3f46; --focus: #3f3f46; }
+
+/* Dark mode: the accent turns into Apple's dark system colour; the fill keeps white text at 4.5:1, the text tint is light. */
+:root[data-theme='dark'][data-accent='violet'] { --accent-rgb: 94 92 230; --primary: #5e5ce6; --primary-strong: #b3aaff; --focus: #7d7aff; }
+:root[data-theme='dark'][data-accent='pink'] { --accent-rgb: 255 55 95; --primary: #ff375f; --primary-strong: #ff8fa6; --focus: #ff375f; }
+:root[data-theme='dark'][data-accent='orange'] { --accent-rgb: 255 159 10; --primary: #ff9f0a; --primary-strong: #ffb340; --focus: #ff9f0a; }
+:root[data-theme='dark'][data-accent='green'] { --accent-rgb: 48 209 88; --primary: #30d158; --primary-strong: #30d158; --focus: #30d158; }
+:root[data-theme='dark'][data-accent='teal'] { --accent-rgb: 64 200 224; --primary: #40c8e0; --primary-strong: #64d2ff; --focus: #40c8e0; }
+:root[data-theme='dark'][data-accent='graphite'] { --accent-rgb: 142 142 147; --primary: #8e8e93; --primary-strong: #d1d1d6; --focus: #d1d1d6; --primary-fill: #636366; }
+
+/* ---------- Tinted glass: denser, tinted with the accent ---------- */
+:root[data-glass='tinted'] {
+  --glass-a: calc(0.9 - var(--lq) * 0.2);
+  --glass-a-strong: calc(0.86 - var(--lq) * 0.24);
+  --glass-a-pop: calc(0.97 - var(--lq) * 0.06);
+  --glass-blur: calc(36px - var(--lq) * 12px);
+  --glass-blur-panel: calc(48px - var(--lq) * 18px);
+  --glass-sat: calc(1.3 + var(--lq) * 0.4);
+  --orb-o: calc(0.24 + var(--lq) * 0.36);
+  --glass-line: color-mix(in srgb, rgb(var(--accent-rgb)) 14%, rgb(255 255 255 / 0.82));
+  --lens-bg: color-mix(in srgb, rgb(var(--accent-rgb)) 13%, rgb(255 255 255 / calc(0.96 - var(--lq) * 0.12)));
+}
+:root[data-theme='dark'][data-glass='tinted'] {
+  --glass-a: calc(0.86 - var(--lq) * 0.18);
+  --glass-a-strong: calc(0.84 - var(--lq) * 0.22);
+  --glass-sat: calc(1.1 + var(--lq) * 0.2);
+  --orb-o: calc(0.16 + var(--lq) * 0.24);
+  --lens-bg: color-mix(in srgb, rgb(var(--accent-rgb)) 30%, rgb(255 255 255 / calc(0.14 + var(--lq) * 0.04)));
+  --glass-line: color-mix(in srgb, rgb(var(--accent-rgb)) 18%, rgb(255 255 255 / 0.12));
+}
+
+/* ---------- High contrast ---------- */
+@media (prefers-contrast: more) {
+  :root {
+    --border: rgb(24 32 43 / 0.45);
+    --border-strong: rgb(24 32 43 / 0.7);
+    --ink-2: #3a3a3c;
+    --ink-3: #3a3a3c;
+    --glass-a: 0.94;
+    --glass-a-strong: 0.94;
+  }
+}
+
+/* Fon = Liquid in dark keeps the original liquid glass (owner, 2026-10-27: "where is our beautiful liquid glass — I asked
+   for options, not to remove it"): see-through glass over the coloured orbs. The calm graphite above stays for the plain
+   backgrounds (a plain Fon sets data-bg; Liquid sets none). */
+:root[data-theme='dark']:not([data-bg]) {
+  --page-bg: #161617;
+  --glass-rgb: 46 46 54;
+  --card-rgb: 36 36 42;
+  --glass-a: calc(0.72 - var(--lq) * 0.4);
+  --glass-a-strong: calc(0.62 - var(--lq) * 0.44);
+  --glass-a-pop: calc(0.97 - var(--lq) * 0.06);
+  --glass-a-dense: calc(0.9 - var(--lq) * 0.14);
+  --glass-sat: calc(1.25 + var(--lq) * 0.45);
+  --rim-a: calc(0.14 + var(--lq) * 0.26);
+  --rim-b: calc(0.03 + var(--lq) * 0.07);
+  --glow-a: calc(var(--lq) * 0.07);
+  --glass-rim: rgb(255 255 255 / var(--rim-a));
+  --glass-line: rgb(255 255 255 / calc(0.06 + var(--lq) * 0.06));
+  --spot-on: rgb(255 255 255 / calc(0.04 + var(--lq) * 0.04));
+  --lens-bg: rgb(255 255 255 / calc(0.17 - var(--lq) * 0.04));
+  --lens-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 12px -2px rgb(0 0 0 / 0.35);
+  --shadow-card: 0 1px 1px rgb(0 0 0 / 0.2), 0 8px 26px -10px rgb(0 0 0 / 0.5);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.25), 0 16px 36px -12px rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 2px 8px rgb(0 0 0 / 0.3), 0 28px 60px -16px rgb(0 0 0 / 0.7);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']):not([data-bg]) {
+    --page-bg: #161617;
+    --glass-rgb: 46 46 54;
+    --card-rgb: 36 36 42;
+    --glass-a: calc(0.72 - var(--lq) * 0.4);
+    --glass-a-strong: calc(0.62 - var(--lq) * 0.44);
+    --glass-a-pop: calc(0.97 - var(--lq) * 0.06);
+    --glass-a-dense: calc(0.9 - var(--lq) * 0.14);
+    --glass-sat: calc(1.25 + var(--lq) * 0.45);
+    --rim-a: calc(0.14 + var(--lq) * 0.26);
+    --rim-b: calc(0.03 + var(--lq) * 0.07);
+    --glow-a: calc(var(--lq) * 0.07);
+    --glass-rim: rgb(255 255 255 / var(--rim-a));
+    --glass-line: rgb(255 255 255 / calc(0.06 + var(--lq) * 0.06));
+    --spot-on: rgb(255 255 255 / calc(0.04 + var(--lq) * 0.04));
+    --lens-bg: rgb(255 255 255 / calc(0.17 - var(--lq) * 0.04));
+    --lens-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 12px -2px rgb(0 0 0 / 0.35);
+    --shadow-card: 0 1px 1px rgb(0 0 0 / 0.2), 0 8px 26px -10px rgb(0 0 0 / 0.5);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.25), 0 16px 36px -12px rgb(0 0 0 / 0.6);
+    --shadow-pop: 0 2px 8px rgb(0 0 0 / 0.3), 0 28px 60px -16px rgb(0 0 0 / 0.7);
+  }
+}

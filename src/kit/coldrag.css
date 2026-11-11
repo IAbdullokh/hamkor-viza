@@ -1,0 +1,54 @@
+/* A table's headers dragged to another place and their edges to another width (kit/coldrag.ts, DataTable). */
+
+/* the whole header is the handle; a small ⠿ shows on hover */
+.data-table th.col-movable { cursor: grab; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.data-table th.col-movable > button { cursor: inherit; }
+.col-grip {
+  position: absolute; inset-inline-start: 1px; top: 50%; translate: 0 -50%;
+  color: var(--ink-3); opacity: 0; pointer-events: none; transition: opacity 140ms;
+}
+.data-table th.col-movable:hover > .col-grip, .data-table th.col-movable:focus-within > .col-grip, .data-table th.col-dragged > .col-grip { opacity: 0.7; }
+
+/* the header being dragged follows the pointer; its column fades where it was */
+.data-table th.col-dragged {
+  z-index: 4; cursor: grabbing; color: var(--ink);
+  background: rgb(var(--card-rgb) / 0.98); box-shadow: 0 6px 18px rgb(15 23 42 / 0.18); border-radius: 8px;
+}
+.data-table td.col-dragged { opacity: 0.45; }
+:root[data-col-dragging], :root[data-col-dragging] * { cursor: grabbing !important; -webkit-user-select: none; user-select: none; }
+
+/* where it lands: a line between two columns, over the whole table */
+.col-drop-line {
+  position: absolute; top: 0; z-index: 6; width: 3px; margin-inline-start: -1.5px; border-radius: 999px;
+  background: rgb(var(--accent-rgb)); box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.18); pointer-events: none;
+}
+
+/* over the middle of another column: the two swap — the whole target column lights up */
+.col-drop-swap {
+  position: absolute; top: 0; z-index: 6; border-radius: 10px; pointer-events: none;
+  background: rgb(var(--accent-rgb) / 0.12); box-shadow: inset 0 0 0 2px rgb(var(--accent-rgb) / 0.7);
+}
+
+/* the edge to drag the width on (double click = automatic) */
+.col-resize {
+  position: absolute; top: 0; bottom: 0; inset-inline-end: -4px; z-index: 3; width: 8px;
+  cursor: col-resize; touch-action: none;
+}
+.col-resize::after {
+  content: ''; position: absolute; top: 25%; bottom: 25%; inset-inline-start: 3px; width: 2px; border-radius: 999px;
+  background: rgb(var(--accent-rgb) / 0.55); opacity: 0; transition: opacity 140ms;
+}
+.data-table th:hover > .col-resize::after, .col-resize:active::after { opacity: 1; }
+
+/* a phone: no hover; the width edge is only for a mouse (a finger long-presses a header to move it) */
+@media (hover: none), (pointer: coarse) {
+  .col-resize { display: none; }
+  .col-grip { opacity: 0.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .col-grip, .col-resize::after { transition: none; }
+}
+
+/* in edit mode a block's insides take no pointer (a click opens it zoomed); a header can still be dragged — a plain
+   click on it still opens the zoomed block (EditableBlock), the click that ends a drag does not */
+:root .block-edit .data-table th.col-movable, :root .block-edit .data-table th .col-resize { pointer-events: auto; }

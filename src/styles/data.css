@@ -1,0 +1,483 @@
+/*
+ * BI-specific pieces on top of the Liquid Glass system: numbers, tables, meters, chips,
+ * status dots, skeletons, the dashboard grid and the code editor.
+ * Everything sits in the components layer so Tailwind utilities can still override it.
+ */
+@property --spin {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer components {
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum', 'ss01';
+  }
+
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* Thin share bar (ShareList, plan progress). --v is 0..1. */
+  .meter {
+    position: relative;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .meter > span {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--v, 0) * 100%);
+    border-radius: inherit;
+    background: var(--bar, var(--primary));
+    transition: width 700ms var(--ease-calm);
+  }
+
+  /* Removable filter chip */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 30px;
+    padding: 0 0.625rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 var(--glass-rim);
+  }
+
+  /* Status dot with a soft glow: data-s = ok | sync | warn | off | error */
+  .status-dot {
+    position: relative;
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--dot, #34c759);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot, #34c759) 22%, transparent), 0 0 10px color-mix(in srgb, var(--dot, #34c759) 70%, transparent);
+  }
+  .status-dot[data-s='ok'] { --dot: #30d158; }
+  .status-dot[data-s='sync'] { --dot: #0a84ff; }
+  .status-dot[data-s='warn'] { --dot: #ffb340; }
+  .status-dot[data-s='error'] { --dot: #ff453a; }
+  .status-dot[data-s='off'] { --dot: #8e8e93; box-shadow: none; }
+  .status-dot[data-s='sync']::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    border: 2px solid var(--dot);
+    animation: dot-ping 1.6s var(--ease-calm) infinite;
+  }
+
+  /* Data tables */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.875rem;
+  }
+  .data-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.5rem 0.75rem;
+    text-align: start;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    background: rgb(var(--card-rgb) / 0.86);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .data-table td {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .data-table tbody tr {
+    transition: background-color 120ms;
+  }
+  .data-table tbody tr:hover {
+    background: rgb(var(--accent-rgb) / 0.06);
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .data-table .r {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Loading skeleton */
+  .skeleton {
+    border-radius: 12px;
+    background: linear-gradient(90deg, var(--surface-2) 0%, color-mix(in srgb, var(--surface-2) 40%, rgb(255 255 255 / 0.5)) 50%, var(--surface-2) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+
+  /* Soft refresh while filters change: content blurs a touch and a light sweep crosses the card. */
+  .is-refreshing {
+    position: relative;
+  }
+  .is-refreshing > * {
+    filter: blur(1.2px);
+    opacity: 0.75;
+    transition: filter 160ms, opacity 160ms;
+  }
+  .is-refreshing::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%);
+    background-size: 220% 100%;
+    animation: shimmer 900ms var(--ease-calm) infinite;
+  }
+
+  /* Rotating rainbow ring (AI thinking, live sync) — from Camera Lab. */
+  .ai-ring {
+    position: relative;
+    isolation: isolate;
+  }
+  .ai-ring::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--spin), #0a84ff, #5e5ce6, #bf5af2, #ff375f, #ff9f0a, #30d158, #40c8e0, #0a84ff);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: spin-ring 2.4s linear infinite;
+  }
+  .ai-ring::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    z-index: -2;
+    border-radius: inherit;
+    background: conic-gradient(from var(--spin), #0a84ff, #bf5af2, #ff375f, #ff9f0a, #30d158, #0a84ff);
+    filter: blur(14px);
+    opacity: 0.45;
+    animation: spin-ring 2.4s linear infinite;
+  }
+
+  /* Dashboard grid in edit mode: a soft dotted canvas. */
+  .grid-canvas[data-editing='true'] {
+    background-image: radial-gradient(circle, var(--border-strong) 1px, transparent 1.4px);
+    background-size: 24px 24px;
+    border-radius: 28px;
+    outline: 1.5px dashed var(--border-strong);
+    outline-offset: 6px;
+  }
+
+  /* Thin scrollbars inside panels */
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  /* Formula / field tokens */
+  .field-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 30px;
+    padding: 0 0.625rem 0 0.375rem;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    cursor: grab;
+    user-select: none;
+    border: 1px solid transparent;
+    transition: transform 200ms var(--ease-spring), box-shadow 160ms, background-color 160ms;
+  }
+  .field-pill[data-kind='dimension'] {
+    color: color-mix(in srgb, #3478f6 60%, var(--ink));
+    background: rgb(52 120 246 / 0.1);
+    border-color: rgb(52 120 246 / 0.2);
+  }
+  .field-pill[data-kind='measure'] {
+    color: color-mix(in srgb, #1f9d6b 60%, var(--ink));
+    background: rgb(31 157 107 / 0.1);
+    border-color: rgb(31 157 107 / 0.22);
+  }
+  .field-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--lens-shadow);
+  }
+  .field-pill:active {
+    cursor: grabbing;
+  }
+
+  /* Code editor surface (CodeMirror) */
+  .code-surface {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    border-radius: 18px;
+    background: rgb(var(--card-rgb) / var(--glass-a-dense));
+    border: 1px solid var(--glass-line);
+    overflow: hidden;
+  }
+  .code-surface .cm-editor {
+    background: transparent;
+    height: 100%;
+  }
+  .code-surface .cm-editor.cm-focused {
+    outline: none;
+  }
+  .code-surface .cm-gutters {
+    background: transparent;
+    border-right: 1px solid var(--border);
+    color: var(--ink-3);
+  }
+  .code-surface .cm-activeLine,
+  .code-surface .cm-activeLineGutter {
+    background: var(--surface-2);
+  }
+  .code-surface .cm-content {
+    caret-color: var(--primary);
+    padding: 12px 0;
+  }
+  .code-surface .cm-selectionBackground,
+  .code-surface .cm-editor ::selection {
+    background: var(--primary-soft) !important;
+  }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -20% 0; }
+}
+@keyframes dot-ping {
+  0% { opacity: 0.8; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+@keyframes spin-ring {
+  to { --spin: 360deg; }
+}
+@keyframes fly-in {
+  from { opacity: 0; transform: translate(var(--fx, 0), var(--fy, -40px)) scale(0.85); }
+}
+
+/* Sparkline draw-in */
+@media (prefers-reduced-motion: no-preference) {
+  .spark-reveal {
+    animation: spark-reveal 1100ms var(--ease-calm) both;
+  }
+}
+@keyframes spark-reveal {
+  from { width: 0; }
+}
+
+/* Native chart bars (charts/NativeViews.tsx) grow from the start */
+@media (prefers-reduced-motion: no-preference) {
+  .bar-grow {
+    /* backwards: the start state covers the delay; once grown nothing of the animation stays on the bar */
+    animation: bar-grow 700ms var(--ease-calm) backwards;
+    transform-origin: left center;
+  }
+}
+@keyframes bar-grow {
+  from { transform: scaleX(0); }
+}
+
+/* Overlay entrances (transform-only where blur is involved: animating opacity would suspend the glass blur). */
+.sheet-overlay { animation: fade-in 220ms var(--ease-calm) both; }
+.sheet-right { animation: sheet-right 420ms var(--ease-calm) both; }
+.sheet-bottom { animation: sheet-bottom 460ms var(--ease-calm) both; }
+.modal-in { animation: modal-in 380ms var(--ease-spring) both; }
+.pop-in { animation: pop-in 220ms var(--ease-calm) both; transform-origin: var(--radix-popper-transform-origin, top); }
+.toast-in { animation: toast-in 420ms var(--ease-spring) both; }
+@keyframes sheet-right { from { transform: translateX(calc(100% + 24px)); } }
+@keyframes sheet-bottom { from { transform: translateY(calc(100% + 24px)); } }
+/* Tailwind v4 centres with the `translate` property, so these keyframes only touch `transform`. */
+@keyframes modal-in { from { transform: translateY(4%) scale(0.96); } }
+@keyframes pop-in { from { transform: scale(0.96) translateY(-4px); } }
+@keyframes toast-in { from { transform: translateY(24px) scale(0.9); } }
+
+/* ECharts glass tooltip (className set in charts/theme.ts). Hidden until ECharts positions it. */
+.echarts-glass:not([style*='position']) {
+  display: none !important;
+}
+.echarts-glass {
+  border-radius: 16px !important;
+  padding: 10px 12px !important;
+  min-width: 160px;
+  background-color: rgb(var(--glass-rgb) / var(--glass-a-pop)) !important;
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 12px)) saturate(var(--glass-sat));
+  backdrop-filter: blur(calc(var(--glass-blur) + 12px)) saturate(var(--glass-sat));
+  border: 1px solid var(--glass-line) !important;
+  box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-pop) !important;
+  color: var(--ink) !important;
+  font-size: 12px;
+}
+.echarts-glass .et-title { font-weight: 650; margin-bottom: 6px; color: var(--ink); }
+.echarts-glass .et-row { display: flex; align-items: center; gap: 8px; line-height: 1.7; }
+.echarts-glass .et-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+.echarts-glass .et-label { color: var(--ink-2); flex: 1; }
+.echarts-glass .et-val { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+.echarts-glass .et-foot { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); color: var(--ink-3); }
+
+/* Dashboard grid cells glide to their new place while another block is dragged/resized. */
+.dash-cell {
+  transition:
+    transform 420ms var(--ease-spring),
+    width 380ms var(--ease-calm),
+    height 380ms var(--ease-calm);
+  will-change: transform;
+}
+.device-in { animation: device-in 520ms var(--ease-spring) both; }
+@keyframes device-in { from { transform: translateY(24px) scale(0.96); opacity: 0; } }
+
+/* bar-in-cell (enabled per UI via DS.tableBars) */
+.cell-bar { display: block; height: 3px; margin-top: 4px; margin-inline-start: auto; width: var(--w); border-radius: 99px; background: rgb(var(--accent-rgb) / 0.55); }
+
+/* ---------- Home system previews: gentle depth motion (ERP / Kamera tiles) ---------- */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes cam-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(260%); }
+}
+@keyframes cam-walk {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) .hero-float { animation: hero-float 6s var(--ease-calm, ease-in-out) infinite; }
+  :root:not([data-motion='reduced']) .hero-float-2 { animation: hero-float 7s var(--ease-calm, ease-in-out) 1.2s infinite; }
+  :root:not([data-motion='reduced']) .hero-float-3 { animation: hero-float 5s var(--ease-calm, ease-in-out) 0.6s infinite; }
+  :root:not([data-motion='reduced']) .cam-scan { animation: cam-scan 3.6s linear infinite; }
+  :root:not([data-motion='reduced']) .cam-walk { animation: cam-walk 4s ease-in-out infinite; }
+}
+
+/* ---------- Dashboard edit mode (features/blockedit) and the DataLens-style updating state ---------- */
+.block-edit { position: relative; cursor: pointer; border-radius: 26px; outline: none; }
+.block-edit > :not(.block-edit-tag) { pointer-events: none; }
+.block-edit::after {
+  content: ''; position: absolute; inset: -5px; border-radius: 30px; pointer-events: none;
+  border: 2px dashed rgb(var(--accent-rgb) / 0.28); transition: border-color 160ms, box-shadow 160ms;
+}
+.block-edit:hover::after, .block-edit:focus-visible::after {
+  border: 2px solid rgb(var(--accent-rgb) / 0.75); box-shadow: 0 0 0 6px rgb(var(--accent-rgb) / 0.12);
+}
+.block-edit-tag {
+  position: absolute; top: -12px; inset-inline-start: 14px; z-index: 6; max-width: 70%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  border-radius: 999px; padding: 2px 10px; font-size: 0.6875rem; font-weight: 700; color: #fff;
+  background: rgb(var(--accent-rgb)); opacity: 0; transform: translateY(3px); transition: opacity 160ms, transform 160ms;
+}
+.block-edit:hover .block-edit-tag, .block-edit:focus-visible .block-edit-tag { opacity: 1; transform: none; }
+.block-edit[data-hidden] > :not(.block-edit-tag) { opacity: 0.35; filter: grayscale(1); }
+[data-dash-busy] .panel, [data-dash-busy] .block-edit {
+  filter: blur(1.4px) saturate(0.85); opacity: 0.72; transition: filter 220ms, opacity 220ms;
+}
+.panel, .block-edit { transition: filter 260ms, opacity 260ms; }
+.dash-busy-pill {
+  position: sticky; top: 76px; z-index: 30; display: flex; width: fit-content; margin: 0 auto -32px; align-items: center; gap: 6px;
+  border-radius: 999px; padding: 6px 12px; font-size: 0.8125rem; font-weight: 600; color: var(--ink);
+  background: var(--surface); box-shadow: 0 8px 24px -10px rgb(15 23 42 / 0.35), inset 0 0 0 1px var(--border);
+}
+
+/* the build-up strip: data flowing from the source into the dashboard */
+@keyframes flow-dash { to { stroke-dashoffset: -32; } }
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) .flow-dash { animation: flow-dash 1.1s linear infinite; }
+}
+
+/* comparison bars + ranks in a block's table (colRules "bars" | "barsRank", features/blockedit/colstyle.ts): a soft bar
+   behind the number, in the column's own colour (else the block's accent); the Jami row has none */
+.data-table td.cell-cmp { position: relative; isolation: isolate; }
+.cmp-bar {
+  position: absolute; z-index: -1; inset-block: 5px; inset-inline-start: 4px;
+  max-width: calc(100% - 8px); border-radius: 7px;
+  background: rgb(var(--accent-rgb)); opacity: 0.2; pointer-events: none;
+  transition: width 260ms var(--ease-spring, ease);
+}
+:root[data-theme='dark'] .cmp-bar { opacity: 0.32; }
+.cmp-rank {
+  display: inline-grid; place-items: center; width: 17px; height: 17px; margin-inline-end: 5px; vertical-align: 1px;
+  border-radius: 99px; font-size: 0.625rem; font-weight: 800; line-height: 1; color: #fff;
+  font-variant-numeric: tabular-nums; box-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+}
+.cmp-rank-1 { background: linear-gradient(140deg, #f6c64a, #d99a0b); }
+.cmp-rank-2 { background: linear-gradient(140deg, #b9c2cc, #8a95a3); }
+.cmp-rank-3 { background: linear-gradient(140deg, #dc9a62, #b06a33); }
+
+/* the progress look (owner, 2026-10-26: a "Lid va Konversiya" table as a variation; table.barStyle "line", colRules "ring",
+   features/blockedit/colstyle.ts): a thin rounded line under the number on a faint track, in the column's colour (else the
+   accent); a percent column as a 28px ring with the % inside; the header in the column's colour, darkened (light) or
+   lightened (dark) so small capitals keep their contrast. The Jami row has neither. */
+.data-table td.cell-line { vertical-align: middle; }
+.cmp-line {
+  display: block; height: 4px; margin-top: 5px; min-width: 44px; border-radius: 99px; overflow: hidden;
+  background: rgb(120 120 135 / 0.16);
+}
+.cmp-line > span {
+  display: block; height: 100%; border-radius: inherit; background: rgb(var(--accent-rgb));
+  transition: width 260ms var(--ease-spring, ease);
+}
+:root[data-theme='dark'] .cmp-line { background: rgb(200 200 215 / 0.14); }
+.data-table th.col-tint { color: color-mix(in oklab, var(--cc) 66%, #000); }
+:root[data-theme='dark'] .data-table th.col-tint { color: color-mix(in oklab, var(--cc) 78%, #fff); }
+.data-table td.cell-ring-td { padding-block: 4px; }
+.cell-ring { position: relative; display: inline-grid; place-items: center; width: 28px; height: 28px; vertical-align: middle; }
+.cell-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.cell-ring-track { fill: none; stroke: rgb(120 120 135 / 0.18); stroke-width: 3; }
+:root[data-theme='dark'] .cell-ring-track { stroke: rgb(200 200 215 / 0.16); }
+.cell-ring-fill { fill: none; stroke: rgb(var(--accent-rgb)); stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 300ms var(--ease-spring, ease); }
+.cell-ring-text { position: relative; font-size: 0.5625rem; font-weight: 700; line-height: 1; color: var(--color-ink, inherit); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+@media (prefers-reduced-motion: reduce) { .cmp-line > span, .cell-ring-fill { transition: none; } }
+/* the pencil's "Rangli chiziqli jadval" tile (kit/DataTable ProgressTile): the same look, small */
+.progress-mini { border-collapse: collapse; font-size: 0.625rem; color: var(--color-ink); table-layout: fixed; }
+.progress-mini th { padding: 0 4px 3px; font-size: 0.5625rem; font-weight: 700; text-transform: uppercase; text-align: end; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.progress-mini td { padding: 2px 4px; text-align: end; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.progress-mini td:first-child { text-align: start; overflow: hidden; text-overflow: ellipsis; max-width: 64px; color: var(--color-ink-2); }
+.progress-mini th.col-tint { color: color-mix(in oklab, var(--cc) 66%, #000); }
+:root[data-theme='dark'] .progress-mini th.col-tint { color: color-mix(in oklab, var(--cc) 78%, #fff); }
+.progress-mini .cmp-line { min-width: 0; margin-top: 2px; height: 3px; }
+.progress-mini .cell-ring { transform: scale(0.8); }
+
+/* heat cells (kit/HeatMatrix) read too faint on a dark card: stronger there */
+:root[data-theme='dark'] { --heat-boost: 1.7; }
+
+/* the pinned columns of a wide table (kit/DataTable): the row number and the first column stay put while the rest scrolls
+   under them, so both are opaque and the first one has an edge (owner, 2026-11-09: a name drawn under the date column of a
+   list sheet — the columns showed through the see-through pinned cell, and the number column was not pinned at all) */
+@layer components {
+  .data-table th { z-index: 2; }
+  .data-table .dt-num {
+    position: sticky; inset-inline-start: 0; z-index: 1;
+    width: 3.25rem; min-width: 3.25rem; max-width: 3.25rem; padding-inline: 0.5rem;
+    background: rgb(var(--card-rgb));
+  }
+  .data-table .dt-pin {
+    position: sticky; inset-inline-start: 0; z-index: 1;
+    background: rgb(var(--card-rgb));
+    box-shadow: inset -1px 0 0 var(--border);
+  }
+  .data-table.dt-numbered .dt-pin { inset-inline-start: 3.25rem; }
+  .data-table th.dt-num, .data-table th.dt-pin { z-index: 3; }
+  [dir='rtl'] .data-table .dt-pin { box-shadow: inset 1px 0 0 var(--border); }
+}
