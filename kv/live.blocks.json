@@ -4,5 +4,128 @@
   },
   "lead:card:sabablar mas'ullar kesimida": {
     "hidden": true
+  },
+  "lead:card:sifatsiz sabablari": {
+    "color": "pink"
+  },
+  "lead:card:bekor bo'lish sabablari": {
+    "color": "red"
+  },
+  "lead:card:xaridor va konversiya": {
+    "viewTables": {
+      "manager": {
+        "colColors": {
+          "umumiy": "blue",
+          "jarayonda": "orange",
+          "bekor": "teal",
+          "sifatsiz": "red",
+          "konv": "yellow",
+          "sifkonv": "green"
+        },
+        "colRules": {
+          "umumiy": {
+            "mode": "bars"
+          },
+          "jarayonda": {
+            "mode": "bars"
+          },
+          "bekor": {
+            "mode": "bars"
+          },
+          "sifatsiz": {
+            "mode": "bars"
+          },
+          "konv": {
+            "mode": "bars"
+          },
+          "sifkonv": {
+            "mode": "bars"
+          }
+        },
+        "barStyle": "line"
+      }
+    }
+  },
+  "lead:card:xaridor mas'ullar kesimida": {
+    "table": {
+      "colColors": {
+        "total": "blue",
+        "Ne obrabotinniy": "orange",
+        "Yangi lid": "teal",
+        "Propushenniy": "red",
+        "Javob bermadi": "yellow",
+        "Qayta aloqa": "green",
+        "O'ylab ko'radi": "purple",
+        "Tashrif belgilandi": "pink",
+        "Kelmadi": "indigo",
+        "Sifatsiz lid": "cyan"
+      },
+      "colRules": {
+        "total": {
+          "mode": "bars"
+        },
+        "Ne obrabotinniy": {
+          "mode": "bars"
+        },
+        "Yangi lid": {
+          "mode": "bars"
+        },
+        "Propushenniy": {
+          "mode": "bars"
+        },
+        "Javob bermadi": {
+          "mode": "bars"
+        },
+        "Qayta aloqa": {
+          "mode": "bars"
+        },
+        "O'ylab ko'radi": {
+          "mode": "bars"
+        },
+        "Tashrif belgilandi": {
+          "mode": "bars"
+        },
+        "Kelmadi": {
+          "mode": "bars"
+        },
+        "Sifatsiz lid": {
+          "mode": "bars"
+        }
+      },
+      "barStyle": "line"
+    }
+  },
+  "lead:card:manba bo'yicha": {
+    "table": {
+      "colColors": {
+        "umumiy": "blue",
+        "sifatli": "orange",
+        "sifatsiz": "teal",
+        "bekor": "red",
+        "konv": "yellow",
+        "sifkonv": "green"
+      },
+      "colRules": {
+        "umumiy": {
+          "mode": "bars"
+        },
+        "sifatli": {
+          "mode": "bars"
+        },
+        "sifatsiz": {
+          "mode": "bars"
+        },
+        "bekor": {
+          "mode": "bars"
+        },
+        "konv": {
+          "mode": "bars"
+        },
+        "sifkonv": {
+          "mode": "bars"
+        }
+      },
+      "barStyle": "line"
+    }
   }
 }

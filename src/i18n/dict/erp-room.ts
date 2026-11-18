@@ -1,0 +1,33 @@
+import type { Dict } from '@/i18n'
+
+/** The meeting room (features/erp/room, docs/jonli-uchrashuv.md §6). */
+export default {
+  "Chiqish": ["Выйти", "Leave"],
+  "Uchrashuv": ["Встреча", "Meeting"],
+  "Uchrashuv boshlash": ["Начать встречу", "Start a meeting"],
+  "Yozib olinmoqda": ["Идёт запись", "Recording"],
+  "Bu uchrashuv yozib olinadi: ovozingiz saqlanadi va matnga aylantiriladi. Video saqlanmaydi.": ["Эта встреча записывается: ваш голос сохраняется и превращается в текст. Видео не сохраняется.", "This meeting is recorded: your voice is kept and turned into text. Video is not kept."],
+  "Yozuv to'xtatildi.": ["Запись остановлена.", "Recording has stopped."],
+  "Uchrashuv tugadi": ["Встреча завершена", "The meeting has ended"],
+  "Siz chiqdingiz": ["Вы вышли", "You left"],
+  "Qayta kirish": ["Войти снова", "Join again"],
+  "Uchrashuv to'lgan": ["Встреча заполнена", "The meeting is full"],
+  "Ismingiz": ["Ваше имя", "Your name"],
+  "Siz": ["Вы", "You"],
+  "Ulanmoqda…": ["Подключение…", "Connecting…"],
+  "{name} bilan ulanib bo'lmadi": ["Не удалось подключиться: {name}", "Could not connect to {name}"],
+  "Ovozi yozilmayapti": ["Голос не записывается", "Voice is not being recorded"],
+  "Mikrofon o'chiq": ["Микрофон выключен", "Microphone off"],
+  "Mikrofonni o'chirish": ["Выключить микрофон", "Turn microphone off"],
+  "Mikrofonni yoqish": ["Включить микрофон", "Turn microphone on"],
+  "Kamerani o'chirish": ["Выключить камеру", "Turn camera off"],
+  "Kamerani yoqish": ["Включить камеру", "Turn camera on"],
+  "Ovozni yoqish": ["Включить звук", "Turn sound on"],
+  "Mikrofon va kameraga ruxsat berilmadi": ["Нет доступа к микрофону и камере", "Microphone and camera were not allowed"],
+  "Bu brauzerda mikrofon ishlamaydi": ["В этом браузере микрофон не работает", "The microphone does not work in this browser"],
+  "Mikrofon topilmadi": ["Микрофон не найден", "No microphone found"],
+  "Yangi havola": ["Новая ссылка", "New link"],
+  "{n} ta ovoz bo'lagi matnga aylanmadi": ["Не удалось превратить в текст кусков голоса: {n}", "{n} voice {n|piece|pieces} could not be turned into text"],
+  "Uchrashuvni tugatish": ["Завершить встречу", "End the meeting"],
+  "Ha, hammaga tugatish": ["Да, завершить для всех", "Yes, end it for everyone"],
+} satisfies Dict

@@ -1,0 +1,67 @@
+import type { Dict } from '@/i18n'
+
+/** "Kirish": one login per person for a published dashboard (features/access), its line in the publish window and the viewer's login card. */
+export default {
+  "Serverga yetkazilmadi — «Qayta yuborish»ni bosing": ['Не дошло до сервера — нажмите «Отправить снова»', 'Did not reach the server — press «Send again»'],
+  'Bu login band — boshqasini tanlang': ['Этот логин занят — выберите другой', 'This login is taken — choose another'],
+  "Saqlab bo'lmadi — qayta urinib ko'ring": ['Не удалось сохранить — попробуйте ещё раз', 'Could not save — try again'],
+  '«{name}» — dashbordni kim ocha oladi': ['«{name}» — кто может открыть дашборд', '«{name}» — who can open the dashboard'],
+  "Har bir kishiga o'z login va paroli. Kimnidir o'chirsangiz yoki parolini yangilasangiz, uning ochiq oynasi ham yopiladi.": [
+    'У каждого свой логин и пароль. Если отключить человека или сменить ему пароль, его открытое окно тоже закроется.',
+    'Everyone gets their own login and password. Switch someone off or reset their password and their open window closes too.',
+  ],
+  "Dashbord internetda, lekin hozir uni hech kim ocha olmaydi — kishi qo'shing yoki yoqing.": [
+    'Дашборд в интернете, но сейчас его никто не может открыть — добавьте или включите человека.',
+    'The dashboard is online, but nobody can open it right now — add or switch someone on.',
+  ],
+  "Dashbord hali nashr qilinmagan — ro'yxat nashr qilinganda serverga o'tadi.": [
+    'Дашборд ещё не опубликован — список попадёт на сервер при публикации.',
+    'The dashboard is not published yet — the list goes to the server when you publish.',
+  ],
+  "Oxirgi o'zgarish serverga yetmadi.": ['Последнее изменение не дошло до сервера.', 'The last change did not reach the server.'],
+  'Qayta yuborish': ['Отправить снова', 'Send again'],
+  "Kishi qo'shish": ['Добавить человека', 'Add a person'],
+  "Hali hech kim yo'q.": ['Пока никого нет.', 'Nobody yet.'],
+  "Kirishi mumkin bo'lganlar": ['Кто может войти', 'Who can log in'],
+  'Parolni yangilash': ['Сменить пароль', 'Reset password'],
+  "Kirishni o'chirish": ['Удалить доступ', 'Remove access'],
+  "«{name}» uchun yangi parol yaratiladi. Eski parol ishlamay qoladi va uning ochiq oynasi yopiladi.": [
+    'Для «{name}» будет создан новый пароль. Старый перестанет работать, а открытое окно закроется.',
+    'A new password is made for «{name}». The old one stops working and their open window closes.',
+  ],
+  '«{name}» endi dashbordni ocha olmaydi.': ['«{name}» больше не сможет открыть дашборд.', '«{name}» will no longer be able to open the dashboard.'],
+  Kim: ['Кто', 'Who'],
+  'Masalan: Direktor, Sotuv menejeri Aziz': ['Например: Директор, Менеджер продаж Азиз', 'E.g. Director, Sales manager Aziz'],
+  Login: ['Логин', 'Login'],
+  "Parol avtomatik yaratiladi va faqat bir marta ko'rsatiladi.": ['Пароль создаётся автоматически и показывается один раз.', 'The password is generated and shown only once.'],
+  'Xabar nusxalandi — mijozga yuboring': ['Сообщение скопировано — отправьте клиенту', 'Message copied — send it to the client'],
+  "Nusxa olib bo'lmadi": ['Не удалось скопировать', 'Could not copy'],
+  '{name} uchun parol': ['Пароль для {name}', 'Password for {name}'],
+  'Nusxa olindi': ['Скопировано', 'Copied'],
+  "Parolni hozir saqlang yoki yuboring — keyin u ko'rinmaydi.": ['Сохраните или отправьте пароль сейчас — потом он не будет виден.', 'Save or send the password now — it will not be shown again.'],
+  'Mijozga yuborish': ['Отправить клиенту', 'Send to client'],
+  Tayyor: ['Готово', 'Done'],
+  'Oxirgi kirish: {at}': ['Последний вход: {at}', 'Last opened: {at}'],
+  'Hali kirmagan': ['Ещё не входил', 'Not opened yet'],
+  '{name}: kirish yoqilgan': ['{name}: доступ включён', '{name}: access on'],
+  'Dashbordni hech kim ocha olmaydi': ['Дашборд никто не может открыть', 'Nobody can open the dashboard'],
+  "Oxirgi o'zgarish serverga yetmadi": ['Последнее изменение не дошло до сервера', 'The last change did not reach the server'],
+  '{n} kishi': ['{n} чел.', '{n} people'],
+  "Dashbordni hech kim ocha olmaydi — kamida bitta kishi qo'shing": [
+    'Дашборд никто не сможет открыть — добавьте хотя бы одного человека',
+    'Nobody could open the dashboard — add at least one person',
+  ],
+  "Birinchi kishi — keyin «Kirish»da har bir mijozga alohida login qo'shasiz.": [
+    'Первый человек — потом в «Доступе» добавите каждому клиенту свой логин.',
+    'The first person — later, in «Access», add a separate login for each client.',
+  ],
+  "Hozircha hech kim — keyinroq qo'shaman": ['Пока никого — добавлю позже', 'Nobody for now — I will add people later'],
+  "Dashbord internetga chiqadi, lekin uni hech kim ocha olmaydi — «Kirish»da kishi qo'shmaguningizcha.": [
+    'Дашборд появится в интернете, но открыть его никто не сможет, пока вы не добавите человека в «Доступе».',
+    'The dashboard goes online, but nobody can open it until you add someone in «Access».',
+  ],
+  'Dashbordga kirish': ['Доступ к дашборду', 'Dashboard access'],
+  'Kirish: {n} kishi': ['Доступ: {n} чел.', 'Access: {n} people'],
+  Sozlash: ['Настроить', 'Set up'],
+  "Sizning kirishingiz o'chirilgan — dashbord egasiga murojaat qiling": ['Ваш доступ отключён — обратитесь к владельцу дашборда', 'Your access is switched off — contact the dashboard owner'],
+} satisfies Dict

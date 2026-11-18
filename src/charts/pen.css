@@ -1,0 +1,14 @@
+/* The chart pencil (VisualPicker.tsx, EChart.tsx PenSwitch): a calm swap between forms, the gallery's spotlight. */
+@keyframes pen-swap {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); filter: blur(3px); }
+}
+.pen-swap { animation: pen-swap 380ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.pen-spot { animation: pen-swap 260ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.pen-tile { transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms, border-color 160ms, box-shadow 180ms; }
+.pen-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 22px -14px rgb(var(--accent-rgb, 70 100 255) / 0.55); }
+/* a table under the pencil: its last header keeps room for it, so the pencil never covers that column's name */
+.has-pen .data-table thead tr:first-child > th:last-child { padding-inline-end: 2.75rem; }
+@media (prefers-reduced-motion: reduce) {
+  .pen-swap, .pen-spot { animation: none; }
+  .pen-tile, .pen-tile:hover { transition: none; transform: none; }
+}

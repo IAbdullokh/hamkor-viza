@@ -1,0 +1,26 @@
+/* Outside edit mode every viewer has a block's tools for their own view (personal.ts): ⠿ ✕ ↶ and "O'lcham" over the
+   card's top edge, the width handle in its corner — only while the pointer is on the card (or a tool has the focus),
+   on a touch screen after a tap on the card. Nothing of the card changes otherwise. */
+.block-mine { position: relative; }
+:root .block-mine > .block-edit-tools {
+  position: absolute; top: -15px; inset-inline-end: 12px; z-index: 7; display: flex; gap: 4px;
+  opacity: 0; pointer-events: none; transform: translateY(-2px); transition: opacity 160ms, transform 160ms;
+}
+.block-mine:hover > .block-edit-tools, .block-mine:focus-within > .block-edit-tools, .block-mine[data-dragging] > .block-edit-tools {
+  opacity: 1; pointer-events: auto; transform: none;
+}
+:root .block-mine > .block-size-tools { position: static; pointer-events: none; }
+:root .block-mine > .block-size-tools > * { pointer-events: auto; }
+:root .block-mine .block-size-menu-anchor { top: -15px; inset-inline-end: 112px; opacity: 0; pointer-events: none; }
+:root .block-mine:is(:hover, :focus-within) .block-size-menu-anchor, :root .block-mine .block-size-menu-anchor:has([aria-expanded='true']) { opacity: 1; pointer-events: auto; }
+:root .block-mine .block-resize-edge { opacity: 0; pointer-events: none; }
+:root .block-mine:is(:hover, :focus-within) .block-resize-edge { opacity: 1; pointer-events: auto; }
+.block-mine[data-dragging] { z-index: 40; cursor: grabbing; transition: none; filter: drop-shadow(0 18px 30px rgb(15 23 42 / 0.28)); }
+.block-tool-undo:hover { color: rgb(var(--accent-rgb)); }
+@media (hover: none), (pointer: coarse) {
+  :root .block-mine > .block-edit-tools { top: -18px; }
+  :root .block-mine .block-size-menu-anchor { top: -18px; inset-inline-end: 140px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .block-mine > .block-edit-tools { transition: none; }
+}

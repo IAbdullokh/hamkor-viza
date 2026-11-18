@@ -1,0 +1,62 @@
+/*
+ * Solid colour: the whole Studio while «Effektlar» is off (data-solid, shell/ThemeController), on the full-screen live map
+ * (data-erp: JonliPage) and inside every map (.jx). Owner, 2026-11-10: the other ERP pages, the map page included, keep the
+ * dashboard's background and liquid corners (owner, 2026-11-09: "everywhere we have effects those should be colours solid", "by default those effects
+ * should be off"). Panels are one tinted colour with no see-through glass,
+ * masked rim or pointer spotlight, floating bars lose their blur, and a dialog's backdrop only darkens (a blur there is worked out again
+ * on every frame of its fade). html:root outweighs the glass rules wherever they stand.
+ */
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .panel::before {
+  background: var(--surface-solid);
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .erp-tab .panel::before {
+  background: hsl(var(--erp-h, 216) 72% 98%);
+}
+:is(html:root[data-solid][data-theme='dark'], html:root[data-erp][data-theme='dark'], html:root[data-theme='dark'] .jx) .erp-tab .panel::before {
+  background: hsl(var(--erp-h, 216) 24% 15%);
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .panel .panel::before {
+  background: rgb(var(--card-rgb));
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .panel::after {
+  display: none;
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .panel,
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .erp-tab .panel {
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.06);
+  transition: none;
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .glass,
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .glass-pop {
+  background: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .sheet-overlay {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .wallpaper .orb {
+  display: none;
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .glass-rail {
+  background-image: none;
+  background-color: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: 0 1px 3px rgb(20 26 60 / 0.08);
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .glass-rail::after,
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .rail-lens::before {
+  display: none;
+}
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .rail-lens.rail-lens,
+:is(html:root[data-solid], html:root[data-erp], html:root .jx) .rail-lens.rail-lens:active:not(:disabled) {
+  background: rgb(var(--card-rgb));
+  box-shadow: 0 1px 2px rgb(20 26 60 / 0.12);
+  transform: none;
+}
+:is(html:root[data-solid][data-theme='dark'], html:root[data-erp][data-theme='dark'], html:root[data-theme='dark'] .jx) .rail-lens.rail-lens {
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: none;
+}

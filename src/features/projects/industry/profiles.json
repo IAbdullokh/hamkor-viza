@@ -1,0 +1,50 @@
+{
+  "education": {
+    "visits": true,
+    "pages": ["lead", "deal", "calls", "kampaniyalar", "hisobot", "reja", "taqsimot"],
+    "kpiFirst": { "lead": ["Tashrif belgilandi", "Tashrif buyurdi", "Yakuniy konversiya"], "deal": ["Sotuv bo'ldi", "Konversiya"] },
+    "focus": "Sinov darslari"
+  },
+  "clinic": {
+    "visits": true,
+    "pages": ["lead", "deal", "calls", "kampaniyalar", "hisobot", "reja", "chatlar"],
+    "kpiFirst": { "lead": ["Tashrif belgilandi", "Tashrif buyurdi", "Yakuniy konversiya"], "deal": ["O'rtacha chek", "Sotuv bo'ldi"] },
+    "focus": "Qabullar"
+  },
+  "fitness": {
+    "visits": true,
+    "pages": ["lead", "deal", "calls", "kampaniyalar", "hisobot", "reja"],
+    "kpiFirst": { "lead": ["Tashrif buyurdi", "Yakuniy konversiya"], "deal": ["Sotuv bo'ldi", "O'rtacha chek"] },
+    "focus": "Abonementlar"
+  },
+  "retail": {
+    "visits": false,
+    "pages": ["lead", "deal", "kampaniyalar", "hisobot", "chatlar", "savdo"],
+    "kpiFirst": { "lead": ["Umumiy lid", "Yakuniy konversiya"], "deal": ["O'rtacha chek", "Sotuv bo'ldi"] },
+    "focus": "O'rtacha chek"
+  },
+  "realestate": {
+    "visits": true,
+    "pages": ["lead", "deal", "calls", "kampaniyalar", "hisobot", "reja", "taqsimot"],
+    "kpiFirst": { "lead": ["Tashrif belgilandi", "Tashrif buyurdi", "Sifatli lid"], "deal": ["Sotuv bo'ldi", "O'rtacha chek"] },
+    "focus": "Ko'rsatuvlar"
+  },
+  "services": {
+    "visits": false,
+    "pages": ["lead", "deal", "calls", "hisobot", "reja"],
+    "kpiFirst": { "lead": ["Sifatli lid", "Sifatli konversiya", "Yakuniy konversiya"], "deal": ["Sotuv bo'ldi", "Konversiya"] },
+    "focus": "Sifatli lidlar"
+  },
+  "manufacturing": {
+    "visits": false,
+    "pages": ["lead", "deal", "hisobot", "reja"],
+    "kpiFirst": { "lead": ["Sifatli lid"], "deal": ["Jami Sdelkalar", "O'rtacha chek", "Sotuv bo'ldi"] },
+    "focus": "Buyurtmalar"
+  },
+  "other": {
+    "visits": false,
+    "pages": ["lead"],
+    "kpiFirst": { "lead": [], "deal": [] },
+    "focus": null
+  }
+}

@@ -1,0 +1,436 @@
+/* Moving and removing blocks in edit mode (EditableBlock.tsx, order.ts). The outline, the title tag and the busy blur
+   are in styles/data.css. */
+
+/* the wrapper of an edited or moved block is the grid cell; the card inside fills it as it did without the wrapper */
+.block-cell { display: flex; flex-direction: column; min-width: 0; }
+.block-cell > :not(.block-edit-tag):not(.block-edit-tools):not(.block-size-tools):not(.block-working) { flex: 1 1 auto; min-width: 0; }
+/* a height of its own (Qo'lda, any height): the card fills exactly that, what does not fit is cut at the bottom */
+.block-cell[data-block-sized] > :not(.block-edit-tag):not(.block-edit-tools):not(.block-size-tools):not(.block-working) { min-height: 0; overflow: hidden; }
+/* … its parts keep their own size, so the cut is at the bottom (a title never squeezes away) */
+.block-cell[data-block-sized] > :not(.block-edit-tag):not(.block-edit-tools):not(.block-size-tools):not(.block-working) > * { flex-shrink: 0; }
+/* … and a KPI card fits itself into that height instead of being cut (owner, 2026-11-04: "the things inside the card
+   should get smaller too"): the trend line takes whatever room is left (down to a thin strip), the number and the icon
+   scale with the card's height (cqh: the cell is a size container) — the card's own sizes are the upper limit */
+.block-cell[data-block-sized] { container-type: size; }
+.block-cell[data-block-sized] .look-kpi > .look-kpi-spark,
+.block-cell[data-block-sized] .glass-kpi > :has(> .kpi-spark) {
+  flex: 1 1 0 !important;
+  min-height: 0;
+  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.block-cell[data-block-sized] .glass-kpi > :has(> .kpi-spark) > .kpi-spark { flex: 1 1 0; height: auto; max-height: 2.25rem; min-height: 0.75rem; }
+.block-cell[data-block-sized] .look-kpi > .look-kpi-spark > * { min-height: 0.75rem; }
+.block-cell[data-block-sized] :is(.look-kpi-num, .kpi-num) { font-size: min(var(--kpi-full, 2.25rem), max(1.125rem, 21cqh)) !important; }
+.block-cell[data-block-sized] :is(.look-kpi-circle, .look-kpi .icon-tile) { width: min(2.25rem, 19cqh); height: min(2.25rem, 19cqh); }
+.block-cell[data-block-sized] :is(.look-kpi-circle, .look-kpi .icon-tile) svg { width: 55%; height: 55%; }
+/* a very short card keeps its title and number; the footnote goes first */
+@container (max-height: 150px) {
+  .block-cell[data-block-sized] :is(.look-kpi-foot, .look-kpi .look-kpi-label + * + div:not(.look-kpi-spark)) { display: none; }
+}
+@container (max-height: 130px) {
+  .block-cell[data-block-sized] .glass-kpi > .kpi-num + div { display: none; }
+  .block-cell[data-block-sized] .kpi-label { min-height: 0; -webkit-line-clamp: 1; }
+}
+@container (max-height: 120px) {
+  .block-cell[data-block-sized] :is(.look-kpi > .look-kpi-spark, .glass-kpi > :has(> .kpi-spark)) { display: none; }
+}
+/* a card in a wrapper of its page's own (a clickable KPI on Qo'ng'iroqlar): the wrapper follows the card's size, so a
+   smaller card leaves no empty box (its hover shadow) behind */
+/* `[data-block-sized]`, never `[style*=…]`, inside :has(): a style-attribute test there makes the browser re-check the styles of the whole
+   page each time ANY element's inline style changes, and the ERP map writes one every frame of a zoom (measured 2026-11-10: 4.3 s of style
+   work per 5 s of zooming at 4x CPU, 0.6 s without) */
+:is(.stagger, [data-block-grid]) > :has(> .block-cell:is([data-block-h='compact'], [data-block-sized])) { align-self: start; }
+/* Nova / the AI tips working on the block with its editor closed (bgwork.ts) */
+.block-cell { position: relative; }
+.block-working {
+  position: absolute; z-index: 6; bottom: 10px; left: 50%; transform: translateX(-50%); pointer-events: none;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+  padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  background: var(--surface-solid); color: var(--primary-strong); box-shadow: 0 2px 10px -2px rgb(0 0 0 / 0.25);
+}
+
+/* ⠿ and ✕ in the block's corner: shown on hover / focus, always on touch screens (`:root` outranks data.css's
+   "nothing inside a block in edit mode takes the pointer") */
+:root .block-edit > .block-edit-tools {
+  position: absolute; top: 8px; inset-inline-end: 8px; z-index: 7; display: flex; gap: 4px;
+  pointer-events: auto; opacity: 0; transform: translateY(-2px); transition: opacity 160ms, transform 160ms;
+}
+.block-edit:hover > .block-edit-tools, .block-edit:focus-within > .block-edit-tools, .block-edit[data-dragging] > .block-edit-tools {
+  opacity: 1; transform: none;
+}
+@media (hover: none), (pointer: coarse) {
+  :root .block-edit > .block-edit-tools { opacity: 1; transform: none; }
+}
+.block-tool {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; color: var(--ink-2);
+  background: var(--surface); box-shadow: 0 4px 14px -6px rgb(15 23 42 / 0.35), inset 0 0 0 1px var(--border);
+  transition: background-color 140ms, color 140ms, transform 140ms;
+}
+.block-tool:hover { color: var(--ink); transform: scale(1.06); }
+.block-tool:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 2px; }
+.block-tool-grip { cursor: grab; touch-action: none; }
+.block-tool-remove:hover { color: #fff; background: var(--danger, #e5484d); }
+@media (pointer: coarse) {
+  .block-tool { width: 36px; height: 36px; }
+}
+
+/* the dragged block follows the pointer, lifted */
+.block-edit[data-dragging] {
+  z-index: 40; cursor: grabbing; transition: none; filter: drop-shadow(0 18px 30px rgb(15 23 42 / 0.28));
+}
+.block-edit[data-dragging] > :not(.block-edit-tools):not(.block-edit-tag) { opacity: 0.9; }
+:root[data-block-dragging], :root[data-block-dragging] * { cursor: grabbing !important; user-select: none; }
+
+/* where it will land: a bar on the side of what it is over (a card, a lone card's wrapper, the KPI grid, a pair) */
+[data-block-root] [data-drop] { position: relative; }
+[data-block-root] [data-drop]::before {
+  content: ''; position: absolute; z-index: 8; border-radius: 999px; pointer-events: none;
+  background: rgb(var(--accent-rgb)); box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / 0.18);
+}
+[data-block-root] [data-drop][data-drop-axis='x']::before { top: 6px; bottom: 6px; width: 4px; }
+[data-block-root] [data-drop='before'][data-drop-axis='x']::before { inset-inline-start: -9px; }
+[data-block-root] [data-drop='after'][data-drop-axis='x']::before { inset-inline-end: -9px; }
+[data-block-root] [data-drop][data-drop-axis='y']::before { left: 12px; right: 12px; height: 4px; }
+[data-block-root] [data-drop='before'][data-drop-axis='y']::before { top: -9px; }
+[data-block-root] [data-drop='after'][data-drop-axis='y']::before { bottom: -9px; }
+.block-edit[data-drop]::after { border-color: rgb(var(--accent-rgb) / 0.6); }
+
+/* a page column whose lone cards were moved: every child keeps the cards' 1rem gap, also the KPI grid that has no
+   margin of its own once a card stands above it (a child with its own mt-* keeps it) */
+[data-block-column] > * + *:not([class*='mt-']) { margin-top: 1rem; }
+
+/* the edit bar on top of the dashboard while editing */
+@media (min-width: 1024px) {
+  .block-edit-bar { position: sticky; top: 78px; z-index: 18; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block-edit > .block-edit-tools, .block-tool { transition: none; }
+}
+/* a card over the middle of another: the two trade places — the whole target lights up instead of an edge bar */
+[data-block-root] [data-drop='swap'][data-drop-axis]::before { inset: -5px; width: auto; height: auto; border-radius: 26px; background: rgb(var(--accent-rgb) / 0.12); box-shadow: inset 0 0 0 2px rgb(var(--accent-rgb) / 0.7); }
+
+/* ---------- KPI rows that fill the width (kpifit.ts) ----------
+   The grid gets --kpi-tracks columns; a card of a full row spans --kpi-span of them, a card of a short last row
+   --kpi-last-span, so the last row is stretched across instead of leaving a hole (8 → 4 + 4, 7 → 4 + 3). */
+.stagger[data-kpi-fit] { grid-template-columns: repeat(var(--kpi-tracks), minmax(0, 1fr)); }
+.stagger[data-kpi-fit] > * { grid-column: span var(--kpi-span); }
+.stagger[data-kpi-fit][data-kpi-last='1'] > :nth-last-child(-n + 1),
+.stagger[data-kpi-fit][data-kpi-last='2'] > :nth-last-child(-n + 2),
+.stagger[data-kpi-fit][data-kpi-last='3'] > :nth-last-child(-n + 3),
+.stagger[data-kpi-fit][data-kpi-last='4'] > :nth-last-child(-n + 4),
+.stagger[data-kpi-fit][data-kpi-last='5'] > :nth-last-child(-n + 5),
+.stagger[data-kpi-fit][data-kpi-last='6'] > :nth-last-child(-n + 6),
+.stagger[data-kpi-fit][data-kpi-last='7'] > :nth-last-child(-n + 7),
+.stagger[data-kpi-fit][data-kpi-last='8'] > :nth-last-child(-n + 8),
+.stagger[data-kpi-fit][data-kpi-last='9'] > :nth-last-child(-n + 9),
+.stagger[data-kpi-fit][data-kpi-last='10'] > :nth-last-child(-n + 10),
+.stagger[data-kpi-fit][data-kpi-last='11'] > :nth-last-child(-n + 11) {
+  grid-column: span var(--kpi-last-span);
+}
+
+/* the Liquid Glass KPI number never runs out of its tile: the card is a size container and the number's size is capped
+   by the tile's inner width for its --kpi-ch characters (ui/glass GlassStatCard; the looks do the same in looks.css) */
+.glass-kpi { container-type: inline-size; }
+.glass-kpi .kpi-num { white-space: nowrap; }
+.glass-kpi .kpi-num > * { font-size: min(1em, calc(100cqi / (var(--kpi-ch, 6) * 0.6))); }
+
+/* a block given a colour (edit mode / Nova): a strip of it on top of the card; its icon tile and charts take it too */
+:root .block-tinted.block-tinted { border-top: 3px solid rgb(var(--tile)); }
+
+/* the zoomed editor floats over the page: its block is nearly solid, so the page never shows through its rows — whatever
+   the look's glass (Liquid cards are thin by design) and whether the browser blurs the backdrop behind the dialog */
+[data-block-preview] :is(.panel, .glass-kpi) { --panel-a: 0.97; }
+
+/* the colour dots and the column chips of the zoomed editor */
+.block-dot {
+  position: relative; width: 28px; height: 28px; border-radius: 999px; background: rgb(var(--tile));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), 0 2px 6px -2px rgb(var(--tile) / 0.7);
+  transition: transform 160ms var(--ease-spring, ease);
+}
+.block-dot:hover { transform: scale(1.1); }
+.block-dot[aria-pressed='true'] { box-shadow: 0 0 0 2px var(--surface-solid, #fff), 0 0 0 4px rgb(var(--tile)); }
+.block-dot:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 3px; }
+.block-dot-none {
+  background: conic-gradient(from 0deg, #3478f6, #a858d6, #e5484d, #f49220, #34ba5e, #30acc4, #3478f6);
+  --tile: var(--accent-rgb);
+}
+@media (pointer: coarse) {
+  .block-dot { width: 34px; height: 34px; }
+}
+
+/* ---------- Card sizes (layout.ts, SizeTools.tsx) ----------
+   A container with a sized block is a 12-column grid with dense flow: a sized unit spans its columns, the others keep
+   their share (data-block-auto), and a card dropped next to an empty spot fills it. Bento keeps its own KPI layout. */
+[data-block-grid]:not(.stagger) {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 1rem; align-items: start;
+}
+:root:not([data-design='bento']) .stagger[data-block-grid] {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-flow: row dense;
+}
+[data-block-grid]:not(.stagger) > *, :root:not([data-design='bento']) .stagger[data-block-grid] > * { grid-column: 1 / -1; min-width: 0; }
+[data-block-grid]:not(.stagger)[data-block-auto='1'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='1'] > :not([data-block-span]) { grid-column: span 1; }
+[data-block-grid]:not(.stagger)[data-block-auto='2'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='2'] > :not([data-block-span]) { grid-column: span 2; }
+[data-block-grid]:not(.stagger)[data-block-auto='3'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='3'] > :not([data-block-span]) { grid-column: span 3; }
+[data-block-grid]:not(.stagger)[data-block-auto='4'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='4'] > :not([data-block-span]) { grid-column: span 4; }
+[data-block-grid]:not(.stagger)[data-block-auto='5'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='5'] > :not([data-block-span]) { grid-column: span 5; }
+[data-block-grid]:not(.stagger)[data-block-auto='6'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='6'] > :not([data-block-span]) { grid-column: span 6; }
+[data-block-grid]:not(.stagger)[data-block-auto='7'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='7'] > :not([data-block-span]) { grid-column: span 7; }
+[data-block-grid]:not(.stagger)[data-block-auto='8'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='8'] > :not([data-block-span]) { grid-column: span 8; }
+[data-block-grid]:not(.stagger)[data-block-auto='9'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='9'] > :not([data-block-span]) { grid-column: span 9; }
+[data-block-grid]:not(.stagger)[data-block-auto='10'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='10'] > :not([data-block-span]) { grid-column: span 10; }
+[data-block-grid]:not(.stagger)[data-block-auto='11'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='11'] > :not([data-block-span]) { grid-column: span 11; }
+[data-block-grid]:not(.stagger)[data-block-auto='12'] > :not([data-block-span]), :root:not([data-design='bento']) .stagger[data-block-grid][data-block-auto='12'] > :not([data-block-span]) { grid-column: span 12; }
+[data-block-grid]:not(.stagger) > * { margin-top: 0 !important; }
+[data-block-grid]:not(.stagger) > [data-block-span='1'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='1'] { grid-column: span 1; }
+[data-block-grid]:not(.stagger) > [data-block-span='2'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='2'] { grid-column: span 2; }
+[data-block-grid]:not(.stagger) > [data-block-span='3'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='3'] { grid-column: span 3; }
+[data-block-grid]:not(.stagger) > [data-block-span='4'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='4'] { grid-column: span 4; }
+[data-block-grid]:not(.stagger) > [data-block-span='5'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='5'] { grid-column: span 5; }
+[data-block-grid]:not(.stagger) > [data-block-span='6'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='6'] { grid-column: span 6; }
+[data-block-grid]:not(.stagger) > [data-block-span='7'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='7'] { grid-column: span 7; }
+[data-block-grid]:not(.stagger) > [data-block-span='8'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='8'] { grid-column: span 8; }
+[data-block-grid]:not(.stagger) > [data-block-span='9'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='9'] { grid-column: span 9; }
+[data-block-grid]:not(.stagger) > [data-block-span='10'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='10'] { grid-column: span 10; }
+[data-block-grid]:not(.stagger) > [data-block-span='11'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='11'] { grid-column: span 11; }
+[data-block-grid]:not(.stagger) > [data-block-span='12'], :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span='12'] { grid-column: span 12; }
+/* a phone: a card takes the whole row, a KPI tile half of it (a wide one the whole row) */
+@media (max-width: 639px) {
+  [data-block-grid]:not(.stagger) > [data-block-span] { grid-column: 1 / -1; }
+  :root:not([data-design='bento']) .stagger[data-block-grid] > [data-block-span] { grid-column: span 6; }
+  :root:not([data-design='bento']) .stagger[data-block-grid] > :is([data-block-span='7'], [data-block-span='8'], [data-block-span='9'], [data-block-span='10'], [data-block-span='11'], [data-block-span='12']) { grid-column: 1 / -1; }
+}
+
+/* a compact KPI card: smaller number, no sparkline */
+/* a pair of cards / the added charts' grid inside a sized page column lends its cards to the column's 12 columns
+   (layout.ts markGrid): the wrapper is display: contents, each card is sized like any other block of the column */
+[data-block-grid] > [data-block-flat] { display: contents; }
+[data-block-flat] > * { grid-column: 1 / -1; min-width: 0; margin-top: 0 !important; }
+[data-block-flat][data-block-auto='1'] > :not([data-block-span]) { grid-column: span 1; }
+[data-block-flat][data-block-auto='2'] > :not([data-block-span]) { grid-column: span 2; }
+[data-block-flat][data-block-auto='3'] > :not([data-block-span]) { grid-column: span 3; }
+[data-block-flat][data-block-auto='4'] > :not([data-block-span]) { grid-column: span 4; }
+[data-block-flat][data-block-auto='5'] > :not([data-block-span]) { grid-column: span 5; }
+[data-block-flat][data-block-auto='6'] > :not([data-block-span]) { grid-column: span 6; }
+[data-block-flat][data-block-auto='7'] > :not([data-block-span]) { grid-column: span 7; }
+[data-block-flat][data-block-auto='8'] > :not([data-block-span]) { grid-column: span 8; }
+[data-block-flat][data-block-auto='9'] > :not([data-block-span]) { grid-column: span 9; }
+[data-block-flat][data-block-auto='10'] > :not([data-block-span]) { grid-column: span 10; }
+[data-block-flat][data-block-auto='11'] > :not([data-block-span]) { grid-column: span 11; }
+[data-block-flat][data-block-auto='12'] > :not([data-block-span]) { grid-column: span 12; }
+@media (min-width: 1024px) {
+  [data-block-flat] > [class*='col-span-2']:not([data-block-span]) { grid-column: 1 / -1; }
+}
+[data-block-flat] > [data-block-span='1'] { grid-column: span 1; }
+[data-block-flat] > [data-block-span='2'] { grid-column: span 2; }
+[data-block-flat] > [data-block-span='3'] { grid-column: span 3; }
+[data-block-flat] > [data-block-span='4'] { grid-column: span 4; }
+[data-block-flat] > [data-block-span='5'] { grid-column: span 5; }
+[data-block-flat] > [data-block-span='6'] { grid-column: span 6; }
+[data-block-flat] > [data-block-span='7'] { grid-column: span 7; }
+[data-block-flat] > [data-block-span='8'] { grid-column: span 8; }
+[data-block-flat] > [data-block-span='9'] { grid-column: span 9; }
+[data-block-flat] > [data-block-span='10'] { grid-column: span 10; }
+[data-block-flat] > [data-block-span='11'] { grid-column: span 11; }
+[data-block-flat] > [data-block-span='12'] { grid-column: span 12; }
+/* a sized unit that is a grid around its one block (the added charts' grid with one chart): the block fills the size */
+:is([data-block-grid]:not(.stagger), [data-block-flat]) > [data-block-span]:not(.stagger) { grid-template-columns: minmax(0, 1fr); }
+:is([data-block-grid]:not(.stagger), [data-block-flat]) > [data-block-span]:not(.stagger) > [class*='col-span'] { grid-column: 1 / -1; }
+@media (max-width: 639px) {
+  [data-block-flat] > * { grid-column: 1 / -1 !important; }
+}
+
+[data-block-h='compact'] { align-self: start; }
+[data-block-h='compact'] .glass-kpi { padding: 0.75rem 0.875rem; }
+[data-block-h='compact'] :is(.kpi-num, .look-kpi-num) { margin-top: 0.25rem; font-size: 1.25rem; }
+[data-block-h='compact'] :is(.kpi-spark, .look-kpi-spark) { display: none; }
+/* a chart / table block's height (layout.ts): ~200px compact, ~420px tall; the chart's own box takes it (data-chart-box) */
+.block-cell[data-block-h='compact'] .panel > header { padding-top: 0.75rem; padding-bottom: 0.5rem; }
+.block-cell[data-block-h='compact'] [data-chart-box]:not([style*='max-height']) { height: 200px !important; }
+.block-cell[data-block-h='compact'] [data-chart-box][style*='max-height'] { max-height: 200px !important; }
+.block-cell[data-block-h='tall'] [data-chart-box]:not([style*='max-height']) { height: 420px !important; }
+.block-cell[data-block-h='tall'] [data-chart-box][style*='max-height'] { max-height: 420px !important; }
+/* a tall KPI card: room for a bigger number */
+[data-block-h='tall'] .glass-kpi { min-height: 168px; }
+[data-block-h='tall'] :is(.kpi-num, .look-kpi-num) { font-size: 2.5rem; }
+
+/* the size tools: "O'lcham" next to ⠿ ✕ (top), the width handle in the bottom corner */
+:root .block-edit > .block-size-tools { position: static; pointer-events: none; }
+:root .block-edit > .block-size-tools > * { pointer-events: auto; }
+.block-size-menu-anchor {
+  position: absolute; top: 8px; inset-inline-end: 84px; z-index: 7; opacity: 0; transition: opacity 160ms;
+}
+.block-edit:hover .block-size-menu-anchor, .block-edit:focus-within .block-size-menu-anchor, .block-size-menu-anchor:has([aria-expanded='true']) { opacity: 1; }
+.block-size-menu {
+  position: absolute; top: 36px; inset-inline-end: 0; z-index: 30; display: flex; flex-direction: column; min-width: 180px;
+  padding: 6px; border-radius: 14px; font-size: 0.8125rem; color: var(--ink);
+}
+.block-size-menu-flip { inset-inline-end: auto; inset-inline-start: 0; }
+.block-size-menu-head { padding: 4px 8px; font-weight: 700; color: var(--ink-3); font-size: 0.75rem; }
+.block-size-menu > button {
+  display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; text-align: start; font-weight: 600;
+}
+.block-size-menu > button > :first-child { flex: 1; }
+.block-size-menu > button:hover, .block-size-menu > button:focus-visible { background: var(--surface-2, rgb(0 0 0 / 0.05)); outline: none; }
+.block-size-menu-sep { border-top: 1px solid var(--border); border-radius: 0 0 10px 10px !important; margin-top: 2px; }
+.block-size-menu-head.block-size-menu-sep { margin-top: 4px; padding-top: 8px; border-radius: 0 !important; }
+
+/* the frame's sides and corners drag the size (SizeTools): 10px rails along the left, right and bottom border, 16px
+   corners; a pill / corner mark shows on hover, focus and touch. Physical sides: the pointer moves on the screen. */
+.block-resize-edge { position: absolute; z-index: 6; touch-action: none; }
+.block-resize-w, .block-resize-e { top: 16px; bottom: 16px; width: 10px; cursor: ew-resize; }
+.block-resize-w { left: -5px; }
+.block-resize-e { right: -5px; }
+.block-resize-s { left: 16px; right: 16px; bottom: -5px; height: 10px; cursor: ns-resize; }
+.block-resize-nw, .block-resize-ne, .block-resize-sw, .block-resize-se { width: 16px; height: 16px; }
+.block-resize-nw { top: -5px; left: -5px; cursor: nwse-resize; }
+.block-resize-se { bottom: -5px; right: -5px; cursor: nwse-resize; z-index: 7; border-radius: 6px; }
+.block-resize-ne { top: -5px; right: -5px; cursor: nesw-resize; }
+.block-resize-sw { bottom: -5px; left: -5px; cursor: nesw-resize; }
+.block-resize-edge::after {
+  content: ''; position: absolute; opacity: 0; transition: opacity 160ms; pointer-events: none;
+  background: rgb(var(--accent-rgb) / 0.85); border-radius: 999px;
+}
+.block-resize-w::after, .block-resize-e::after { top: 50%; left: 3px; width: 4px; height: 28px; transform: translateY(-50%); }
+.block-resize-s::after { left: 50%; top: 3px; width: 28px; height: 4px; transform: translateX(-50%); }
+/* a corner: an L along its two borders */
+.block-resize-nw::after, .block-resize-ne::after, .block-resize-sw::after, .block-resize-se::after {
+  width: 10px; height: 10px; background: none; border-radius: 2px; border: 0 solid rgb(var(--accent-rgb) / 0.85);
+}
+.block-resize-nw::after { top: 3px; left: 3px; border-top-width: 3px; border-left-width: 3px; }
+.block-resize-ne::after { top: 3px; right: 3px; border-top-width: 3px; border-right-width: 3px; }
+.block-resize-sw::after { bottom: 3px; left: 3px; border-bottom-width: 3px; border-left-width: 3px; }
+.block-resize-se::after { bottom: 3px; right: 3px; border-bottom-width: 3px; border-right-width: 3px; }
+.block-edit:hover .block-resize-edge::after, .block-edit:focus-within .block-resize-edge::after, .block-resize-edge:hover::after,
+:root[data-block-dragging] .block-resize-edge::after { opacity: 1; }
+.block-resize-se:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 2px; }
+.block-resize-se:focus-visible::after { opacity: 1; }
+@media (hover: none), (pointer: coarse) {
+  .block-size-menu-anchor { opacity: 1; inset-inline-end: 96px; }
+  .block-resize-edge::after { opacity: 1; }
+  .block-resize-w, .block-resize-e { width: 18px; }
+  .block-resize-w { left: -9px; }
+  .block-resize-e { right: -9px; }
+  .block-resize-s { height: 18px; bottom: -9px; }
+  .block-resize-nw, .block-resize-ne, .block-resize-sw, .block-resize-se { width: 26px; height: 26px; }
+}
+/* the size while it is dragged: "6/12 · Baland" in the middle of the block */
+.block-size-live {
+  position: absolute; top: 50%; left: 50%; z-index: 9; transform: translate(-50%, -50%); pointer-events: none;
+  padding: 4px 10px; border-radius: 999px; font-size: 0.8125rem; font-weight: 700; white-space: nowrap;
+  color: var(--on-primary, #fff); background: rgb(var(--accent-rgb) / 0.92); box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+}
+
+/* a coloured block takes its colour into its numbers, links, bars and chart accents too (owner: "why can't I change the
+   number colours?") — the page's accent tokens are re-pointed at the block's tile colour inside the block only */
+:root .block-tinted {
+  --accent-rgb: var(--tile);
+  --primary: rgb(var(--tile));
+  --primary-strong: color-mix(in srgb, rgb(var(--tile)) 78%, #000);
+  --primary-soft: rgb(var(--tile) / 0.14);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+}
+:root[data-theme='dark'] .block-tinted { --primary-strong: color-mix(in srgb, rgb(var(--tile)) 70%, #fff); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .block-tinted { --primary-strong: color-mix(in srgb, rgb(var(--tile)) 70%, #fff); }
+}
+/* a custom colour (tint.ts: `.tile-x…` sets --tile and its readable text shades --tile-ink-l / -d, ≥ 4.5:1 on the card):
+   the strip and the icon tile keep the picked colour, the numbers and links take its readable shade */
+:root .block-tinted.tile-custom { --primary: rgb(var(--tile-ink-l)); --primary-strong: rgb(var(--tile-ink-l)); }
+:root[data-theme='dark'] .block-tinted.tile-custom { --primary: rgb(var(--tile-ink-d)); --primary-strong: rgb(var(--tile-ink-d)); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .block-tinted.tile-custom { --primary: rgb(var(--tile-ink-d)); --primary-strong: rgb(var(--tile-ink-d)); }
+}
+
+/* the colour picker (ColorPicker.tsx): the rainbow dot holding a custom colour, the shades, the area and the hue */
+.block-dot-custom {
+  display: grid; place-items: center; color: #fff; border: 3px solid transparent;
+  background: linear-gradient(rgb(var(--tile)), rgb(var(--tile))) padding-box,
+    conic-gradient(from 0deg, #3478f6, #a858d6, #e5484d, #f49220, #34ba5e, #30acc4, #3478f6) border-box;
+}
+.block-dot-check { filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.45)); }
+.color-swatch {
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1); transition: transform 140ms var(--ease-spring, ease);
+}
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch[aria-pressed='true'] { box-shadow: 0 0 0 2px var(--surface-solid, #fff), 0 0 0 4px var(--ink, #1d1d1f); }
+.color-swatch:focus-visible, .color-area:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 2px; }
+.color-area {
+  cursor: crosshair;
+  background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, hsl(var(--hue) 100% 50%));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+}
+.color-area-knob {
+  position: absolute; width: 18px; height: 18px; border-radius: 999px; transform: translate(-50%, -50%); pointer-events: none;
+  box-shadow: 0 0 0 2px #fff, 0 1px 6px rgb(0 0 0 / 0.45);
+}
+.color-hue {
+  -webkit-appearance: none; appearance: none; height: 14px; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+}
+.color-hue::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 999px; background: #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.15), 0 1px 5px rgb(0 0 0 / 0.35);
+}
+.color-hue::-moz-range-thumb { width: 20px; height: 20px; border: 0; border-radius: 999px; background: #fff; box-shadow: 0 1px 5px rgb(0 0 0 / 0.35); }
+.color-hue:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 3px; }
+
+/* ---------- A picked column (ColumnTools.tsx, kit/DataTable `pick`) ----------
+   In the zoomed editor's preview a hovered column lights up softly; the picked one gets an outline down its cells. */
+.data-table-pick th, .data-table-pick td { cursor: pointer; }
+.data-table-pick .col-hot { background-image: linear-gradient(rgb(var(--accent-rgb) / 0.07), rgb(var(--accent-rgb) / 0.07)); }
+.data-table-pick .col-picked {
+  background-image: linear-gradient(rgb(var(--accent-rgb) / 0.12), rgb(var(--accent-rgb) / 0.12));
+  box-shadow: inset 2px 0 0 rgb(var(--accent-rgb) / 0.85), inset -2px 0 0 rgb(var(--accent-rgb) / 0.85);
+}
+.data-table-pick thead tr:last-child th.col-picked { box-shadow: inset 2px 0 0 rgb(var(--accent-rgb) / 0.85), inset -2px 0 0 rgb(var(--accent-rgb) / 0.85), inset 0 2px 0 rgb(var(--accent-rgb) / 0.85); }
+.data-table-pick tfoot th.col-picked, .data-table-pick tfoot td.col-picked { box-shadow: inset 2px 0 0 rgb(var(--accent-rgb) / 0.85), inset -2px 0 0 rgb(var(--accent-rgb) / 0.85), inset 0 -2px 0 rgb(var(--accent-rgb) / 0.85); }
+.data-table-pick th button:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 2px; border-radius: 6px; }
+.block-dot-sm { width: 22px; height: 22px; }
+@media (pointer: coarse) {
+  .block-dot-sm { width: 30px; height: 30px; }
+}
+.col-tools { background: linear-gradient(115deg, rgb(var(--accent-rgb) / 0.08), rgb(var(--accent-rgb) / 0.03)); box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.22); }
+.col-num {
+  width: 5.5rem; height: 2rem; border-radius: 999px; padding: 0 0.625rem; font-size: 0.8125rem;
+  background: var(--surface-solid, #fff); color: inherit; border: 1px solid var(--glass-line);
+}
+
+/* ---------- Edit tools outside the card (owner, 2026-10-26: "⤢ ⠿ ✕ sit on the tabs, «Sana» can't be clicked") ----------
+   ⠿ ✕ and "O'lcham" float in a small strip just above the card's top-right corner, so the card's own header controls
+   (its view tabs, the chart pencil) stay free; a view switcher (data-block-keep) keeps working in edit mode and in the
+   zoomed editor's preview. */
+:root .block-edit > .block-edit-tools { top: -15px; inset-inline-end: 12px; }
+:root .block-edit .block-size-menu-anchor { top: -15px; inset-inline-end: 88px; }
+@media (hover: none), (pointer: coarse) {
+  :root .block-edit > .block-edit-tools { top: -18px; }
+  :root .block-edit .block-size-menu-anchor { top: -18px; inset-inline-end: 100px; }
+}
+:root .block-edit [data-block-keep], [data-block-preview] [data-block-keep] { pointer-events: auto; cursor: auto; }
+/* the zoomed editor's views: each a chip with its tools */
+.block-view-chip { display: inline-flex; align-items: center; gap: 2px; min-height: 34px; padding: 0 4px 0 12px; border-radius: 999px; }
+.block-view-chip > button.block-view-tool { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 999px; color: inherit; opacity: 0.75; }
+.block-view-chip > button.block-view-tool:hover:not(:disabled) { opacity: 1; background: rgb(0 0 0 / 0.08); }
+.block-view-chip > button.block-view-tool:disabled { opacity: 0.3; cursor: default; }
+.block-view-chip > button.block-view-tool:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 1px; }
+@media (pointer: coarse) {
+  .block-view-chip > button.block-view-tool { width: 32px; height: 32px; }
+}
+
+/* the change log's "take me there" (flash.ts): the block blinks twice in the accent */
+.block-cell[data-block-flash] { border-radius: var(--radius-card); animation: block-flash 1.1s ease-in-out 2; }
+@keyframes block-flash {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--accent-rgb) / 0); }
+  50% { box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / 0.75), 0 0 28px 4px rgb(var(--accent-rgb) / 0.35); }
+}
+
+/* a card that is clicked through a button of its page's own under it (Qo'ng'iroqlar's KPI cards open their calls; the
+   card says so with pointer-events-none): outside edit mode its block lets the click through to that button too, its
+   own tools stay clickable (owner, 2026-11-04: "why are those cards not pressable") */
+.block-mine:has(> .pointer-events-none) { pointer-events: none; }
+.block-mine:has(> .pointer-events-none) > :is(.block-edit-tools, .block-size-tools) { pointer-events: auto; }

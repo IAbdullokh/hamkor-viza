@@ -1,0 +1,52 @@
+/*
+ * "Aralash" — a mood and a density on top of a base look (look/mix.ts). ThemeController writes data-mood / data-density
+ * on <html> only while a mixed look is shown, and forces data-theme from the mood (yorug' = light, qorong'i / neon = dark),
+ * so the base design's own light / dark tokens do most of the work; this file adds the neon palette and the spacing.
+ * The doubled [data-mood] lifts these rules above the base looks' `:root[data-design][data-theme]` blocks.
+ */
+
+/* ---------- Neon: deep night, cyan / magenta / lime charts, a faint glowing rim ---------- */
+:root[data-mood='neon'][data-mood][data-theme='dark'] {
+  --page-bg: #05070c;
+  --orb-1: #0e7490;
+  --orb-2: #6d28d9;
+  --orb-3: #0f766e;
+  --orb-4: #1e3a8a;
+  --orb-5: #a21caf;
+  --card-rgb: 14 19 30;
+  --glass-rgb: 14 19 30;
+  --glass-line: rgb(34 211 238 / 0.2);
+  --border: rgb(34 211 238 / 0.14);
+  --surface-2: rgb(34 211 238 / 0.07);
+  --surface-solid: #0c111b;
+  --ink: #e8edf7;
+  --ink-2: #aab3c5;
+  --ink-3: #8a94a8;
+  --chart-1: #22d3ee;
+  --chart-2: #e879f9;
+  --chart-3: #a3e635;
+  --chart-4: #fb7185;
+  --chart-5: #60a5fa;
+  --chart-6: #c084fc;
+  --chart-7: #34d399;
+  --chart-8: #8b8fa8;
+  --chart-grid: rgb(148 163 255 / 0.09);
+  --chart-axis: rgb(148 163 255 / 0.22);
+  --shadow-card: 0 0 0 1px rgb(34 211 238 / 0.08), 0 14px 34px -18px rgb(34 211 238 / 0.35);
+  color-scheme: dark;
+}
+:root[data-mood='neon'] .look-kpi-num,
+:root[data-mood='neon'] .page-in h1 {
+  text-shadow: 0 0 18px rgb(34 211 238 / 0.28);
+}
+
+/* ---------- Density: Tailwind spacing is calc(var(--spacing) * n), so one variable scales the whole page ---------- */
+:root[data-density='compact'][data-mood] .page-in {
+  --spacing: 0.205rem;
+}
+:root[data-density='airy'][data-mood] .page-in {
+  --spacing: 0.28rem;
+}
+:root[data-density='compact'][data-mood] .look-kpi-num {
+  font-size: 1.5rem;
+}

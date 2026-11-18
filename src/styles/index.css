@@ -1,0 +1,679 @@
+@import 'tailwindcss';
+@import './tokens.css';
+@import './data.css';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  --color-bg: var(--page-bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-solid: var(--surface-solid);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-fill: var(--primary-fill);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+  --color-mint: var(--mint);
+  --color-mint-ink: var(--mint-ink);
+  --color-warm: var(--warm);
+  --color-warm-soft: var(--warm-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-good: var(--good);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', ui-sans-serif, system-ui, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --radius-card: 26px;
+  --ease-calm: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.3, 1.35, 0.5, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    background: var(--page-bg);
+    /* the scrollbar's room is kept whether a page is long or short: switching tabs never shifts the layout sideways */
+    scrollbar-gutter: stable;
+  }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    /* Transparent so the fixed wallpaper (z-index -1) shows through; html paints the page colour. */
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  :where(button, [role='button'], a, input, select, textarea, summary):focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 12px;
+  }
+  ::selection {
+    background: var(--primary-soft);
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* ---------- Wallpaper: soft pastel orbs behind the glass ---------- */
+.wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--page-bg);
+}
+.orb {
+  position: absolute;
+  opacity: var(--orb-o);
+}
+/* The blur is drawn as a Gaussian-edged radial gradient (no filter: blur), so it costs nothing per frame. */
+.orb::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--orb-blur) * -3);
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in srgb, var(--orb-c) 99%, transparent) calc(var(--orb-r) - 2.5 * var(--orb-blur)),
+    color-mix(in srgb, var(--orb-c) 93%, transparent) calc(var(--orb-r) - 1.5 * var(--orb-blur)),
+    color-mix(in srgb, var(--orb-c) 69%, transparent) calc(var(--orb-r) - 0.5 * var(--orb-blur)),
+    color-mix(in srgb, var(--orb-c) 50%, transparent) var(--orb-r),
+    color-mix(in srgb, var(--orb-c) 31%, transparent) calc(var(--orb-r) + 0.5 * var(--orb-blur)),
+    color-mix(in srgb, var(--orb-c) 7%, transparent) calc(var(--orb-r) + 1.5 * var(--orb-blur)),
+    transparent calc(var(--orb-r) + 3 * var(--orb-blur))
+  );
+}
+.orb.o1 { width: 52vmax; height: 52vmax; left: -14vmax; top: -18vmax; --orb-c: var(--orb-1); --orb-r: 26vmax; }
+.orb.o2 { width: 40vmax; height: 40vmax; right: -12vmax; top: -10vmax; --orb-c: var(--orb-2); --orb-r: 20vmax; }
+.orb.o3 { width: 46vmax; height: 46vmax; right: -10vmax; bottom: -20vmax; --orb-c: var(--orb-3); --orb-r: 23vmax; }
+.orb.o4 { width: 36vmax; height: 36vmax; left: 8vmax; bottom: -16vmax; --orb-c: var(--orb-4); --orb-r: 18vmax; }
+.orb.o5 { width: 26vmax; height: 26vmax; left: 34vmax; top: 24vh; --orb-c: var(--orb-5); --orb-r: 13vmax; opacity: calc(var(--orb-o) * 0.55); }
+/* The orbs never move: a moving backdrop would make every frosted surface above it redraw on every frame. */
+
+/*
+ * The pointer spotlight (shell/MotionLayer) moves --mx / --my on the hovered card every frame. Registered as
+ * non-inherited, only the card itself (and its ::before, which asks for them) is restyled — not everything inside it: a
+ * card holding a long list or table cost ~3 ms of style work per frame, now ~0.1 ms (measured 2026-11-03).
+ */
+@property --mx { syntax: '*'; inherits: false; }
+@property --my { syntax: '*'; inherits: false; }
+.panel::before { --mx: inherit; --my: inherit; }
+
+@layer components {
+  /* Translucent chrome: sidebar, top bar, tab bar. */
+  .glass {
+    background-color: rgb(var(--glass-rgb) / var(--glass-a-strong));
+    background-image:
+      radial-gradient(300px circle at var(--mx, -999px) var(--my, -999px), var(--spot, transparent), transparent 62%),
+      linear-gradient(150deg, rgb(255 255 255 / var(--glow-a)) 0%, transparent 38%, transparent 70%, rgb(255 255 255 / calc(var(--glow-a) * 0.6)) 100%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-panel)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur-panel)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 rgb(255 255 255 / var(--rim-b)), inset 0 0 calc(34px * var(--lq)) rgb(255 255 255 / var(--glow-a)), var(--shadow-card);
+  }
+  /*
+   * The side menu as a macOS widget (owner, 2026-11-07): frosted see-through glass that blurs what is behind it, lit
+   * brighter at its top-left, a thin luminous edge that fades round the corners, and a soft deep shadow under it.
+   */
+  .glass-rail {
+    isolation: isolate;
+    background-image: linear-gradient(160deg, rgb(255 255 255 / 0.62) 0%, rgb(255 255 255 / 0.3) 46%, rgb(255 255 255 / 0.4) 100%);
+    -webkit-backdrop-filter: blur(30px) saturate(1.9);
+    backdrop-filter: blur(30px) saturate(1.9);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      inset 0 -14px 30px -22px rgb(255 255 255 / 0.7),
+      0 26px 60px -26px rgb(20 26 60 / 0.38),
+      0 2px 8px rgb(20 26 60 / 0.06);
+  }
+  .glass-rail::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.98), rgb(255 255 255 / 0.2) 32%, rgb(255 255 255 / 0.06) 62%, rgb(255 255 255 / 0.6));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+  :root[data-theme='dark'] .glass-rail {
+    background-image: linear-gradient(160deg, rgb(70 74 88 / 0.55) 0%, rgb(26 28 36 / 0.45) 46%, rgb(34 36 46 / 0.52) 100%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 0 -14px 30px -22px rgb(255 255 255 / 0.08),
+      0 26px 60px -24px rgb(0 0 0 / 0.6),
+      0 2px 8px rgb(0 0 0 / 0.25);
+  }
+  :root[data-theme='dark'] .glass-rail::after {
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.42), rgb(255 255 255 / 0.08) 32%, rgb(255 255 255 / 0.03) 62%, rgb(255 255 255 / 0.2));
+  }
+  /*
+   * The side menu's chosen item as a liquid lens (owner, 2026-11-07, the macOS segmented control): a glass pill with a
+   * bright edge that fades round it; held down it clears and swells a little, as the lens does, and settles back on release.
+   */
+  /* doubled class: wins over .pressable's own press (it shrinks; the lens swells) */
+  .rail-lens.rail-lens {
+    isolation: isolate;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.82), rgb(255 255 255 / 0.56));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 -1px 2px rgb(255 255 255 / 0.4), 0 6px 16px -8px rgb(20 26 60 / 0.35), 0 1px 2px rgb(20 26 60 / 0.08);
+    transition: background-color 0.25s ease, background-image 0.25s ease, box-shadow 0.25s ease, transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+  }
+  .rail-lens::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(150deg, rgb(255 255 255 / 1), rgb(255 255 255 / 0.25) 40%, rgb(255 255 255 / 0.1) 60%, rgb(255 255 255 / 0.7));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    transition: opacity 0.25s ease;
+  }
+  .rail-lens.rail-lens:active:not(:disabled) {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.04));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 12px rgb(255 255 255 / 0.35), 0 10px 24px -10px rgb(20 26 60 / 0.3);
+    transform: scale(1.04);
+  }
+  :root[data-theme='dark'] .rail-lens.rail-lens {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.09));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.28), inset 0 -1px 2px rgb(255 255 255 / 0.06), 0 6px 16px -8px rgb(0 0 0 / 0.6);
+  }
+  :root[data-theme='dark'] .rail-lens::before {
+    background: linear-gradient(150deg, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.1) 40%, rgb(255 255 255 / 0.04) 60%, rgb(255 255 255 / 0.3));
+  }
+  :root[data-theme='dark'] .rail-lens.rail-lens:active:not(:disabled) {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.01));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 0 12px rgb(255 255 255 / 0.12), 0 10px 24px -10px rgb(0 0 0 / 0.6);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rail-lens.rail-lens { transition: none; }
+    .rail-lens.rail-lens:active:not(:disabled) { transform: none; }
+  }
+  /* Menus, dialogs, toasts: denser so text is always easy to read. */
+  .glass-pop {
+    background-color: rgb(var(--glass-rgb) / var(--glass-a-pop));
+    background-image: linear-gradient(180deg, var(--glass-sheen), transparent 30%);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 12px)) saturate(var(--glass-sat));
+    backdrop-filter: blur(calc(var(--glass-blur) + 12px)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-pop);
+  }
+  /*
+   * Content card: translucent layer, conic rim, sheen and a soft spotlight that follows the pointer.
+   * No backdrop blur: cards sit on the soft, already-blurred wallpaper, where a blur is invisible but makes the
+   * GPU redraw every card on every scroll frame (a long list kept a Mac's GPU busy). Surfaces that float over
+   * content (.glass, .glass-pop) keep their blur.
+   */
+  .panel {
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-card);
+  }
+  .panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-color: rgb(var(--card-rgb) / var(--panel-a, var(--glass-a)));
+    background-image:
+      radial-gradient(380px circle at var(--mx, -999px) var(--my, -999px), var(--spot, transparent), transparent 62%),
+      linear-gradient(180deg, var(--glass-sheen), transparent 34%);
+  }
+  .panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.25px;
+    pointer-events: none;
+    background: conic-gradient(
+      from 215deg,
+      rgb(255 255 255 / var(--rim-a)) 0deg,
+      rgb(255 255 255 / var(--rim-b)) 60deg,
+      rgb(255 255 255 / 0) 120deg,
+      rgb(255 255 255 / calc(var(--rim-a) * 0.55)) 180deg,
+      rgb(255 255 255 / 0) 240deg,
+      rgb(255 255 255 / var(--rim-b)) 300deg,
+      rgb(255 255 255 / var(--rim-a)) 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    opacity: calc(0.35 + var(--lq) * 0.65);
+  }
+  /* Data-heavy content (tables, lists): denser glass so numbers stay sharp. */
+  .panel-dense,
+  .panel:has(ul, ol, table, dl) {
+    --panel-a: var(--glass-a-dense);
+  }
+  .panel .panel::before {
+    background-color: rgb(var(--card-rgb) / 0.4);
+  }
+  .panel .panel::after {
+    display: none;
+  }
+  .panel-soft {
+    border-radius: var(--radius-card);
+    border: 1px solid var(--glass-line);
+    background: rgb(var(--card-rgb) / var(--glass-a));
+    box-shadow: inset 0 1px 0 var(--glass-rim);
+  }
+  .card-hover {
+    transition: box-shadow 160ms, transform 320ms var(--ease-spring);
+  }
+  .card-hover:hover {
+    box-shadow: inset 0 1px 0 var(--glass-rim), var(--shadow-lift);
+    transform: translateY(-2px);
+  }
+  .card-hover:active {
+    transform: translateY(0) scale(0.985);
+    transition-duration: 90ms;
+  }
+  .pressable {
+    transition:
+      transform 260ms var(--ease-spring),
+      background-color 160ms var(--ease-calm),
+      box-shadow 160ms var(--ease-calm),
+      color 160ms var(--ease-calm),
+      opacity 160ms var(--ease-calm);
+  }
+  .pressable:active:not(:disabled) {
+    transform: scale(0.96);
+    transition-duration: 80ms;
+  }
+  .tap {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  /* Field look shared by inputs, selects and textareas. */
+  .field {
+    background-color: var(--surface);
+    border: 1px solid var(--border-strong);
+    transition: border-color 160ms, box-shadow 160ms, background-color 160ms;
+  }
+  .field:hover {
+    border-color: color-mix(in srgb, var(--border-strong) 60%, var(--ink-3));
+  }
+  .field:focus {
+    background-color: var(--surface-hover);
+  }
+  /* Consistent rounded selects in every engine (WebKit draws native ones square). */
+  .select-chevron {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a8291' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1rem;
+    padding-inline-end: 2.1rem;
+    text-overflow: ellipsis;
+  }
+  .fade-in { animation: fade-in 220ms var(--ease-calm) both; }
+  .rise-in { animation: rise-in 280ms var(--ease-calm) both; }
+  .reveal { animation: reveal 260ms var(--ease-calm) both; }
+  .celebrate { animation: celebrate 650ms var(--ease-spring) both; }
+  .page-in { animation: page-rise 320ms var(--ease-calm) both; }
+  .stagger > * { animation: rise-in 360ms var(--ease-calm) both; }
+  .stagger > *:nth-child(2) { animation-delay: 40ms; }
+  .stagger > *:nth-child(3) { animation-delay: 80ms; }
+  .stagger > *:nth-child(4) { animation-delay: 120ms; }
+  .stagger > *:nth-child(n + 5) { animation-delay: 160ms; }
+  .shake { animation: shake 380ms var(--ease-calm); }
+  .pop { animation: pop 420ms var(--ease-spring); }
+}
+
+/* ---------- Coloured icon tiles and KPI cards ---------- */
+.tile-blue { --tile: 52 120 246; }
+.tile-orange { --tile: 244 146 32; }
+.tile-green { --tile: 52 186 94; }
+.tile-indigo { --tile: 92 92 214; }
+.tile-purple { --tile: 168 88 214; }
+.tile-teal { --tile: 48 172 196; }
+.tile-mint { --tile: 20 186 176; }
+.tile-pink { --tile: 232 76 128; }
+.tile-yellow { --tile: 232 180 20; }
+.tile-gray { --tile: 136 136 144; }
+.tile-red { --tile: 229 72 77; }
+.tile-cyan { --tile: 50 173 230; }
+.tile-accent { --tile: var(--accent-rgb); }
+
+.icon-tile {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: #fff;
+  background:
+    radial-gradient(120% 80% at 30% 0%, rgb(255 255 255 / 0.45), transparent 55%),
+    linear-gradient(160deg, color-mix(in srgb, rgb(var(--tile)) 72%, #fff) 0%, rgb(var(--tile)) 70%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), inset 0 -1px 1px rgb(0 0 0 / 0.12), 0 6px 14px -4px rgb(var(--tile) / 0.6);
+  transition: transform 500ms var(--ease-spring);
+}
+.group:hover .icon-tile.tile-wiggle {
+  transform: scale(1.08) rotate(-4deg);
+}
+.kpi-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgb(var(--tile) / calc(0.1 + var(--lq) * 0.16)), transparent 62%),
+    radial-gradient(90% 70% at 100% 100%, rgb(var(--tile) / calc(0.06 + var(--lq) * 0.1)), transparent 70%);
+}
+.kpi-mark {
+  position: absolute;
+  right: -10px;
+  bottom: -12px;
+  width: 84px;
+  height: 84px;
+  color: rgb(var(--tile));
+  opacity: calc(0.07 + var(--lq) * 0.06);
+  transform: rotate(-12deg);
+  transition: transform 600ms var(--ease-calm), opacity 400ms var(--ease-calm);
+  pointer-events: none;
+}
+.group:hover .kpi-mark {
+  transform: rotate(-4deg) scale(1.08) translateY(-4px);
+  opacity: calc(0.11 + var(--lq) * 0.08);
+}
+.kpi-label {
+  color: color-mix(in srgb, rgb(var(--tile)) 52%, #1d1d1f);
+}
+:root[data-theme='dark'] .kpi-label {
+  color: color-mix(in srgb, rgb(var(--tile)) 62%, #ffffff);
+}
+/* the info tip shows when the card is pointed at (always there for touch and the keyboard) */
+@media (hover: hover) and (pointer: fine) {
+  .kpi-info {
+    opacity: 0;
+    transition: opacity 160ms;
+  }
+  .group:hover .kpi-info,
+  .kpi-info:focus-within {
+    opacity: 1;
+  }
+}
+/* Dark (Apple's graphite): a card inside a card is the next step up (#3a3a3c), the tiles' coloured glow stays small */
+:root[data-theme='dark'] .panel .panel::before {
+  background-color: rgb(255 255 255 / 0.06);
+}
+:root[data-theme='dark'] .icon-tile {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 -1px 1px rgb(0 0 0 / 0.12), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .panel .panel::before {
+    background-color: rgb(255 255 255 / 0.06);
+  }
+  :root:not([data-theme='light']) .icon-tile {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4), inset 0 -1px 1px rgb(0 0 0 / 0.12), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  }
+  :root:not([data-theme='light']) .kpi-label {
+    color: color-mix(in srgb, rgb(var(--tile)) 62%, #ffffff);
+  }
+}
+/*
+ * A plain page ("Fon": Yumshoq yorug', Oq, Shifer, Ko'k tun…, lib/pageBg) is the calm, analysing view: one hue, no
+ * decoration. The label is neutral ink, the sparkline is the accent, the corner glow and the big watermark icon go; only
+ * the small coloured icon tile keeps the card's own colour. Shorter sparkline, so a row of cards stays low.
+ */
+:root[data-bg] .kpi-glow,
+:root[data-bg] .kpi-mark {
+  display: none;
+}
+:root[data-bg][data-bg] .kpi-label {
+  color: var(--ink-2);
+}
+:root[data-bg] .glass-kpi {
+  --kpi-spark: rgb(var(--accent-rgb));
+}
+:root[data-bg] .kpi-spark {
+  height: 28px;
+}
+/* Liquid glass: KPI cards never thinner than 80% over the orbs (text at 4.5:1 or more) */
+:root:not([data-bg]) .glass-kpi {
+  --panel-a: max(0.8, var(--glass-a-dense));
+}
+
+/* ---------- Sliding glass lens (segmented controls, nav) ---------- */
+.lens {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  border-radius: 999px;
+  pointer-events: none;
+  background: var(--lens-bg);
+  box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 0.5px rgb(255 255 255 / calc(var(--lq) * 0.5)), var(--lens-shadow);
+  transition:
+    transform 420ms var(--ease-spring),
+    width 420ms var(--ease-spring),
+    height 420ms var(--ease-spring),
+    opacity 160ms;
+}
+
+/* ---------- Accent picker dots ---------- */
+.ap-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 34% 28%, rgb(255 255 255 / 0.62), rgb(255 255 255 / 0) 46%),
+    radial-gradient(circle at 60% 85%, rgb(0 0 0 / 0.14), rgb(0 0 0 / 0) 60%),
+    var(--dot);
+  box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.14), inset 0 -1px 1.5px rgb(0 0 0 / 0.12), 0 1px 3px rgb(0 0 0 / 0.14);
+  transition: transform 450ms var(--ease-spring);
+}
+.ap-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 2px solid var(--dot);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 200ms, transform 450ms var(--ease-spring);
+}
+.ap-dot:hover { transform: scale(1.12); }
+.ap-dot:active { transform: scale(0.9); }
+.ap-dot > svg { width: 13px; height: 13px; opacity: 0; transform: scale(0.3); transition: opacity 180ms, transform 450ms var(--ease-spring); }
+.ap-dot[aria-checked='true']::before { opacity: 0.9; transform: scale(1); }
+.ap-dot[aria-checked='true'] > svg { opacity: 1; transform: none; }
+
+/* ---------- Odometer: digits roll into place ---------- */
+.odo-d {
+  display: inline-block;
+  position: relative;
+  clip-path: inset(0 -0.2em);
+}
+.odo-d::after {
+  content: '0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A 0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  white-space: pre;
+  text-align: center;
+  line-height: inherit;
+  -webkit-text-fill-color: currentColor;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) .odo-d {
+    --odo-delay: calc(120ms + var(--i, 0) * 70ms);
+    --odo-dur: calc(1000ms + var(--i, 0) * 90ms);
+    animation: odo-hide calc(var(--odo-delay) + var(--odo-dur)) linear;
+  }
+  :root:not([data-motion='reduced']) .odo-d::after {
+    animation: odo-roll var(--odo-dur) cubic-bezier(0.2, 1.14, 0.32, 1) var(--odo-delay) backwards;
+  }
+}
+.odo-t {
+  display: inline-block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion='reduced']) .odo-t {
+    animation: odo-tick 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+@keyframes odo-tick {
+  from { opacity: 0; transform: translateY(-0.45em); filter: blur(2px); }
+}
+@keyframes odo-hide {
+  from, to {
+    -webkit-text-fill-color: transparent;
+    -webkit-mask-image: linear-gradient(transparent 0, #000 22%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(transparent 0, #000 22%, #000 78%, transparent 100%);
+  }
+}
+@keyframes odo-roll {
+  from { opacity: 1; visibility: visible; transform: translateY(0); }
+  to { opacity: 1; visibility: visible; transform: translateY(calc(-1lh * (10 + var(--d)))); }
+}
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(10px); } }
+@keyframes page-rise { from { opacity: 0; transform: translateY(8px) scale(0.995); } }
+@keyframes reveal { from { opacity: 0; transform: translateY(6px) scale(0.99); } }
+@keyframes celebrate {
+  0% { opacity: 0; transform: scale(0.6) rotate(-12deg); }
+  60% { opacity: 1; transform: scale(1.1) rotate(4deg); }
+  100% { transform: none; }
+}
+@keyframes shake {
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+@keyframes pop {
+  40% { transform: scale(1.06); }
+}
+@keyframes burst {
+  0% { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--bx), var(--by)) rotate(var(--br)) scale(0.6); }
+}
+.burst-piece {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 9px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--bc);
+  animation: burst 1100ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+/* ---------- Pointer spotlight (set by MotionLayer) ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .panel:hover,
+  .glass:hover {
+    --spot: var(--spot-on);
+  }
+  .panel .panel:not(:hover) {
+    --spot: transparent;
+  }
+}
+
+/* ---------- Reduced transparency / no blur support: solid surfaces ---------- */
+:root[data-transparency='reduced'] .glass,
+:root[data-transparency='reduced'] .glass-pop {
+  background: var(--surface-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:root[data-transparency='reduced'] .panel::before {
+  background: var(--surface-solid);
+}
+:root[data-transparency='reduced'] .wallpaper .orb {
+  display: none;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-pop,
+  .panel::before {
+    background: var(--surface-solid);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-pop,
+  .panel::before {
+    background: var(--surface-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ---------- Reduced motion (system or app setting) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+}
+
+dialog::backdrop {
+  background: rgb(12 14 20 / 0.45);
+}
+:root:not([data-transparency='reduced']) dialog::backdrop {
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+/* the scrollbar's room is already kept (html, scrollbar-gutter): a dialog's scroll lock must not add the same width again */
+html body[data-scroll-locked] {
+  margin-right: 0 !important;
+}

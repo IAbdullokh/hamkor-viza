@@ -1,0 +1,68 @@
+/* A page's filter row in edit mode (BarRow.tsx): each filter in a dashed frame with its ⠿ handle and ⋯ menu. */
+.bar-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 2px 4px 2px 2px;
+  border: 1px dashed rgb(var(--accent-rgb) / 0.45);
+  border-radius: 999px;
+  transition: background-color 140ms;
+}
+/* the Davr presets are wide: on a phone they scroll inside the frame instead of pushing the page sideways */
+.bar-node {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bar-node::-webkit-scrollbar { display: none; }
+.bar-item[data-bar-hidden] > .bar-node { opacity: 0.45; }
+.bar-item[data-bar-hidden] { border-style: dotted; }
+
+.bar-grip {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 28px;
+  border-radius: 999px;
+  color: var(--ink-3);
+  cursor: grab;
+  touch-action: none;
+}
+.bar-grip:hover { color: var(--ink); background: var(--surface-2); }
+.bar-grip:focus-visible { outline: 2px solid rgb(var(--accent-rgb)); outline-offset: 1px; }
+@media (pointer: coarse) {
+  .bar-grip { width: 30px; height: 34px; }
+}
+
+/* the dragged filter follows the pointer, lifted */
+.bar-item[data-dragging] {
+  z-index: 40;
+  cursor: grabbing;
+  background: var(--surface-solid);
+  box-shadow: 0 14px 28px -12px rgb(15 23 42 / 0.35);
+}
+/* where it will land: a bar on that side of the filter it is over */
+.bar-item[data-drop]::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: rgb(var(--accent-rgb));
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.18);
+}
+.bar-item[data-drop='before']::before { inset-inline-start: -7px; }
+.bar-item[data-drop='after']::before { inset-inline-end: -7px; }
+.bar-item[data-drop] { background: var(--primary-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-item { transition: none; }
+}
