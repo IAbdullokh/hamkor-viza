@@ -20,7 +20,7 @@
         {
           "value": "UZS",
           "label": "UZS",
-          "count": 11,
+          "count": 14,
           "hint": {
             "code": "GUESS_ACTIVITY"
           }
@@ -63,7 +63,7 @@
         {
           "value": "deal:NEW",
           "label": "Tashrif",
-          "count": 13,
+          "count": 16,
           "color": "#39a8ef",
           "group": "p:0"
         },
@@ -77,7 +77,7 @@
         {
           "value": "deal:PREPAYMENT_INVOICE",
           "label": "Shartnoma",
-          "count": 5,
+          "count": 6,
           "color": "#55d0e0",
           "hint": {
             "code": "GUESS_NAME"
@@ -101,9 +101,9 @@
       "answer": null,
       "impact": {
         "metric": "kelishuv_deals",
-        "value": 5,
-        "guessValue": 5,
-        "total": 11,
+        "value": 6,
+        "guessValue": 6,
+        "total": 14,
         "days": 30
       },
       "dependsOn": [
@@ -137,7 +137,7 @@
         {
           "value": "field:UF_CRM_6AE325F36B071",
           "label": "Tashrif sanasi",
-          "count": 3
+          "count": 6
         },
         {
           "value": "field:UF_CRM_6AE325F3AA35F",
@@ -162,7 +162,7 @@
         {
           "value": "field:UF_CRM_6AE325F448CFA",
           "label": "Javob bermadiga tushgan sana",
-          "count": 0
+          "count": 1
         },
         {
           "value": "field:UF_CRM_6AE325F455F9A",
@@ -182,7 +182,7 @@
         {
           "value": "field:UF_CRM_6AE325F4773C8",
           "label": "Propushniyga tushgan sana",
-          "count": 0
+          "count": 3
         },
         {
           "value": "field:UF_CRM_6AE325F481677",
@@ -197,12 +197,12 @@
         {
           "value": "field:UF_CRM_6AE325F49FA0F",
           "label": "Tashrif belgilandiga tushgan sana",
-          "count": 4
+          "count": 7
         },
         {
           "value": "field:UF_CRM_6AE325F4B097D",
           "label": "Tashrif buyurdiga tushgan sana",
-          "count": 2
+          "count": 3
         },
         {
           "value": "field:UF_CRM_6AE325F4D5D36",
@@ -244,12 +244,12 @@
         {
           "value": "field:UF_CRM_6AE325F299757",
           "label": "Keladi",
-          "count": 2
+          "count": 5
         },
         {
           "value": "field:UF_CRM_6AE325F2A318C",
           "label": "Keldi",
-          "count": 2
+          "count": 3
         },
         {
           "value": "field:UF_CRM_6AE325F2AEC32",
@@ -264,12 +264,12 @@
         {
           "value": "field:UF_CRM_6AE325F32ACF7",
           "label": "Qayta aloqa (hisoblagich)",
-          "count": 0
+          "count": 1
         },
         {
           "value": "field:UF_CRM_6AE325F3499C3",
           "label": "Tashrif SP id",
-          "count": 2
+          "count": 5
         },
         {
           "value": "field:UF_CRM_6AEBFB7A1E267",
@@ -318,7 +318,7 @@
         {
           "value": "0",
           "label": "Asosiy",
-          "count": 11,
+          "count": 14,
           "hint": {
             "code": "GUESS_NAME"
           },
@@ -362,17 +362,17 @@
         {
           "value": "UF_CRM_6AE325F1EC020",
           "label": "Zargan pasporti",
-          "count": 10
+          "count": 13
         },
         {
           "value": "UF_CRM_6AE325F25E364",
           "label": "Qayerdan bilishdi",
-          "count": 2
+          "count": 5
         },
         {
           "value": "UF_CRM_6AE325F285750",
           "label": "Hududlar",
-          "count": 2
+          "count": 3
         },
         {
           "value": "UF_CRM_6AE325F2BA392",
@@ -390,7 +390,7 @@
         {
           "value": "UF_CRM_6AE325F31B5A5",
           "label": "O'ylab ko'rish sababini belgilang",
-          "count": 11,
+          "count": 14,
           "hint": {
             "code": "GUESS_NAME"
           }
@@ -427,22 +427,67 @@
         {
           "value": "UF_CRM_6AEBFB79DB7C7",
           "label": "Pasportda cheklov bormi",
-          "count": 4
+          "count": 7
         },
         {
           "value": "UF_CRM_6AEBFB79E940E",
           "label": "Qaysi davlat",
-          "count": 5
+          "count": 8
         },
         {
           "value": "UF_CRM_6AEBFB7A03871",
           "label": "Ish turi",
-          "count": 10
+          "count": 13
         },
         {
           "value": "UF_CRM_6AEBFB7A11B4A",
           "label": "Viza turi",
-          "count": 10
+          "count": 13
+        },
+        {
+          "value": "UF_CRM_6AFD4CD4AE588",
+          "label": "Qaysi tillarni bilasiz",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD4CC3A4",
+          "label": "Manzilingiz",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD501DBF",
+          "label": "Xorijga chiqish pasportingiz (загранпаспорт) bormi?",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD527B14",
+          "label": "Qaysi turdagi haydovchilik guvohnomangiz bor?",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD55792F",
+          "label": "Oldin boshqa davlatlarda ishlaganmisiz?",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD56C660",
+          "label": "Qaysi davlatdagi vakansiya bo'yicha ma'lumot qoldirmoqchisiz?",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD584797",
+          "label": "Qancha vaqtdan beri ushbu faoliyat bilan shug'ullanasiz?",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD5999BD",
+          "label": "Mutaxassislik bo'yicha guvohnoma yoki sertifikatingiz bormi?",
+          "count": 3
+        },
+        {
+          "value": "UF_CRM_6AFD4CD5B2341",
+          "label": "Chet davlatiga ketish uchun xarajatlarni to'lashga imkoniyatingiz bormi?",
+          "count": 3
         }
       ],
       "guess": {
@@ -481,7 +526,7 @@
         {
           "value": "UF_CRM_6AE325F37726B",
           "label": "Стадия (для отчетов)",
-          "count": 10,
+          "count": 13,
           "hint": {
             "code": "GUESS_NAME"
           }
@@ -489,12 +534,12 @@
         {
           "value": "UF_CRM_6AE325F3816C5",
           "label": "Стадия (для отчетов) 2",
-          "count": 10
+          "count": 13
         },
         {
           "value": "crm_stage",
           "label": "crm_stage",
-          "count": 11
+          "count": 14
         }
       ],
       "guess": {
@@ -525,7 +570,7 @@
             "id": "0",
             "name": "Asosiy",
             "stages": 3,
-            "deals": 11,
+            "deals": 14,
             "process": 2,
             "success": 1,
             "failure": 0,
@@ -552,7 +597,7 @@
         {
           "key": "NEW",
           "label": "Tashrif",
-          "count": 6,
+          "count": 8,
           "guess": "open",
           "confidence": 0.95,
           "group": "p:0"
@@ -560,7 +605,7 @@
         {
           "key": "PREPAYMENT_INVOICE",
           "label": "Shartnoma",
-          "count": 4,
+          "count": 5,
           "guess": "open",
           "confidence": 0.9,
           "group": "p:0",
@@ -627,7 +672,7 @@
         {
           "value": "NEW",
           "label": "Ne obrabotinniy",
-          "count": 3689,
+          "count": 3722,
           "color": "#39a8ef",
           "group": "lead"
         },
@@ -641,7 +686,7 @@
         {
           "value": "PROCESSED",
           "label": "Propushenniy",
-          "count": 2819,
+          "count": 2840,
           "color": "#d9471f",
           "group": "lead"
         },
@@ -655,7 +700,7 @@
         {
           "value": "UC_F35MH6",
           "label": "Qayta aloqa",
-          "count": 229,
+          "count": 233,
           "color": "#fb923c",
           "group": "lead"
         },
@@ -672,7 +717,7 @@
         {
           "value": "UC_ONAVQR",
           "label": "Tashrif belgilandi",
-          "count": 212,
+          "count": 221,
           "color": "#2563eb",
           "hint": {
             "code": "GUESS_NAME"
@@ -696,7 +741,7 @@
         {
           "value": "CONVERTED",
           "label": "Tashrif buyurdi",
-          "count": 10,
+          "count": 12,
           "color": "#7bd500",
           "hint": {
             "code": "GUESS_NAME"
@@ -706,7 +751,7 @@
         {
           "value": "deal:NEW",
           "label": "Tashrif",
-          "count": 13,
+          "count": 16,
           "color": "#39a8ef",
           "group": "p:0"
         },
@@ -720,7 +765,7 @@
         {
           "value": "deal:PREPAYMENT_INVOICE",
           "label": "Shartnoma",
-          "count": 5,
+          "count": 6,
           "color": "#55d0e0",
           "group": "p:0"
         },
@@ -746,9 +791,9 @@
       "answer": null,
       "impact": {
         "metric": "qualified_leads",
-        "value": 270,
+        "value": 278,
         "guessValue": 0,
-        "total": 3686,
+        "total": 3719,
         "days": 30
       },
       "dependsOn": [
@@ -778,17 +823,17 @@
         {
           "value": "UF_CRM_1793270123973",
           "label": "Zargan pasporti",
-          "count": 394
+          "count": 406
         },
         {
           "value": "UF_CRM_1770281702742",
           "label": "Qayerdan bilishdi",
-          "count": 270
+          "count": 278
         },
         {
           "value": "UF_CRM_1777029526318",
           "label": "Hududlar",
-          "count": 231
+          "count": 238
         },
         {
           "value": "UF_CRM_1778050018",
@@ -806,7 +851,7 @@
         {
           "value": "UF_CRM_1771315127007",
           "label": "O'ylab ko'rish sababini belgilang",
-          "count": 3686,
+          "count": 3719,
           "hint": {
             "code": "GUESS_NAME"
           }
@@ -819,7 +864,7 @@
         {
           "value": "UF_CRM_1770609460118",
           "label": "Arxiv sababini belgilang",
-          "count": 148,
+          "count": 152,
           "hint": {
             "code": "GUESS_NAME"
           }
@@ -827,7 +872,7 @@
         {
           "value": "UF_CRM_1770976355232",
           "label": "Bekor bo'ldi sababini belgilang",
-          "count": 58,
+          "count": 59,
           "hint": {
             "code": "GUESS_TEMPLATE"
           }
@@ -835,7 +880,7 @@
         {
           "value": "UF_CRM_1770282341169",
           "label": "Sifatsizlik sababini belgilang",
-          "count": 292,
+          "count": 297,
           "hint": {
             "code": "GUESS_TEMPLATE"
           }
@@ -843,22 +888,22 @@
         {
           "value": "UF_CRM_1793848824712",
           "label": "Pasportda cheklov bormi",
-          "count": 386
+          "count": 398
         },
         {
           "value": "UF_CRM_1793848950989",
           "label": "Qaysi davlat",
-          "count": 312
+          "count": 320
         },
         {
           "value": "UF_CRM_1793849035492",
           "label": "Ish turi",
-          "count": 315
+          "count": 323
         },
         {
           "value": "UF_CRM_1793849696894",
           "label": "Viza turi",
-          "count": 316
+          "count": 324
         },
         {
           "value": "UF_CRM_1794652701",
@@ -908,47 +953,47 @@
         {
           "value": "UF_CRM_1794654250",
           "label": "Qaysi tillarni bilasiz",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654413",
           "label": "Manzilingiz",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654468",
           "label": "Xorijga chiqish pasportingiz (загранпаспорт) bormi?",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654556",
           "label": "Qaysi turdagi haydovchilik guvohnomangiz bor?",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654611",
           "label": "Oldin boshqa davlatlarda ishlaganmisiz?",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654698",
           "label": "Qaysi davlatdagi vakansiya bo'yicha ma'lumot qoldirmoqchisiz?",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654768",
           "label": "Qancha vaqtdan beri ushbu faoliyat bilan shug'ullanasiz?",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654810",
           "label": "Mutaxassislik bo'yicha guvohnoma yoki sertifikatingiz bormi?",
-          "count": 3677
+          "count": 3710
         },
         {
           "value": "UF_CRM_1794654849",
           "label": "Chet davlatiga ketish uchun xarajatlarni to'lashga imkoniyatingiz bormi?",
-          "count": 3677
+          "count": 3710
         }
       ],
       "guess": {
@@ -984,7 +1029,7 @@
         {
           "value": "UF_CRM_1771440293231",
           "label": "Стадия (для отчетов)",
-          "count": 3683,
+          "count": 3716,
           "hint": {
             "code": "GUESS_NAME"
           }
@@ -992,12 +1037,12 @@
         {
           "value": "UF_CRM_1783166097",
           "label": "Стадия (для отчетов) 2",
-          "count": 3683
+          "count": 3716
         },
         {
           "value": "crm_stage",
           "label": "crm_stage",
-          "count": 3686
+          "count": 3719
         }
       ],
       "guess": {
@@ -1057,7 +1102,7 @@
         {
           "key": "NEW",
           "label": "Ne obrabotinniy",
-          "count": 173,
+          "count": 182,
           "guess": "new",
           "confidence": 0.95
         },
@@ -1071,35 +1116,35 @@
         {
           "key": "PROCESSED",
           "label": "Propushenniy",
-          "count": 2628,
+          "count": 2639,
           "guess": "contact",
           "confidence": 0.95
         },
         {
           "key": "UC_BSZM16",
           "label": "Javob bermadi",
-          "count": 24,
+          "count": 23,
           "guess": "contact",
           "confidence": 0.95
         },
         {
           "key": "UC_F35MH6",
           "label": "Qayta aloqa",
-          "count": 158,
+          "count": 160,
           "guess": "contact",
           "confidence": 0.95
         },
         {
           "key": "UC_Z7WUOU",
           "label": "O'ylab ko'radi",
-          "count": 29,
+          "count": 24,
           "guess": "contact",
           "confidence": 0.95
         },
         {
           "key": "UC_ONAVQR",
           "label": "Tashrif belgilandi",
-          "count": 157,
+          "count": 162,
           "guess": "contact",
           "confidence": 0.95
         },
@@ -1120,28 +1165,28 @@
         {
           "key": "CONVERTED",
           "label": "Tashrif buyurdi",
-          "count": 8,
+          "count": 10,
           "guess": "won",
           "confidence": 0.95
         },
         {
           "key": "JUNK",
           "label": "Sandiq",
-          "count": 147,
+          "count": 151,
           "guess": "archive",
           "confidence": 0.95
         },
         {
           "key": "UC_FY4ZX7",
           "label": "Sifatsiz lid",
-          "count": 291,
+          "count": 296,
           "guess": "junk",
           "confidence": 0.95
         },
         {
           "key": "UC_38RA92",
           "label": "Bekor bo'ldi",
-          "count": 57,
+          "count": 58,
           "guess": "lost",
           "confidence": 0.95
         }
@@ -1181,7 +1226,7 @@
         {
           "value": "CALL",
           "label": "Звонок",
-          "count": 3685
+          "count": 3718
         },
         {
           "value": "EMAIL",
@@ -1258,7 +1303,7 @@
         "metric": "paid_leads",
         "value": 0,
         "guessValue": 0,
-        "total": 3686,
+        "total": 3719,
         "days": 30
       }
     },
@@ -1280,7 +1325,7 @@
         {
           "value": "CALL",
           "label": "Звонок",
-          "count": 3685,
+          "count": 3718,
           "hint": {
             "code": "GUESS_NAME"
           }
@@ -1364,9 +1409,9 @@
       "answer": null,
       "impact": {
         "metric": "phone_leads",
-        "value": 3685,
-        "guessValue": 3685,
-        "total": 3686,
+        "value": 3718,
+        "guessValue": 3718,
+        "total": 3719,
         "days": 30
       }
     },
@@ -1405,7 +1450,7 @@
         {
           "value": "18",
           "label": "Operator (Shaxzoda) 101",
-          "count": 1331
+          "count": 1340
         },
         {
           "value": "20",
@@ -1425,7 +1470,7 @@
         {
           "value": "28",
           "label": "Operator (Zuhra) 100",
-          "count": 1239
+          "count": 1248
         },
         {
           "value": "30",
@@ -1438,7 +1483,7 @@
         {
           "value": "32",
           "label": "Operator 102 (Mushtariy)",
-          "count": 1114
+          "count": 1129
         }
       ],
       "guess": {
@@ -1491,12 +1536,12 @@
         {
           "value": "18",
           "label": "Operator (Shaxzoda) 101",
-          "count": 1331
+          "count": 1340
         },
         {
           "value": "28",
           "label": "Operator (Zuhra) 100",
-          "count": 1239
+          "count": 1248
         },
         {
           "value": "30",
@@ -1506,7 +1551,7 @@
         {
           "value": "32",
           "label": "Operator 102 (Mushtariy)",
-          "count": 1114
+          "count": 1129
         }
       ],
       "guess": {
@@ -1590,12 +1635,12 @@
         {
           "value": "18",
           "label": "Operator (Shaxzoda) 101",
-          "count": 1331
+          "count": 1340
         },
         {
           "value": "28",
           "label": "Operator (Zuhra) 100",
-          "count": 1239
+          "count": 1248
         },
         {
           "value": "30",
@@ -1605,7 +1650,7 @@
         {
           "value": "32",
           "label": "Operator 102 (Mushtariy)",
-          "count": 1114
+          "count": 1129
         }
       ],
       "guess": {
