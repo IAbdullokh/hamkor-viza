@@ -4,7 +4,7 @@ The «Hamkor viza» dashboard as a standalone web app (React + TypeScript + Vite
 project. Open this folder in VS Code, run it, change it, deploy it.
 
 - Project: `p_lmyys54pi6h4` · Dashboard: `hamkor-viza` · Pages: lead, calls, hisobot, taqsimot · Live at `https://hamkor-visa.data365dashboard.uz`
-- Last publish · Oxirgi nashr: 2026-11-04 13:39 (Tashkent) <!-- data365:published -->
+- Last publish · Oxirgi nashr: 2026-11-18 10:54 (Tashkent) <!-- data365:published -->
 
 > **The `main` branch is rewritten by Data365 Studio on every publish.** Each publish commits the dashboard's full,
 > current code and settings here («Nashr <date>», by "Data365 Studio"); a hand edit on `main` is replaced by the next
